@@ -4,6 +4,9 @@ const cors = require('cors');
 
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(cors());
 
 /* Get home page */
@@ -18,31 +21,7 @@ app.get('/:username', (req, res) => {
     return res.send('Received a GET HTTP method');
 });
 
-/* Get specific article */
-app.get('/:username/:articleId', (req, res) => {
-    return res.send('Received a GET HTTP method');
-});
-
-/* Compose article */
-app.post('/compose', (req, res) => {
-    return res.send(
-        `POST HTTP method on /compose resource`,
-    );
-});
-
-/* Update specific article */
-app.put('/:username/:articleId', (req, res) => {
-    return res.send(
-        `PUT HTTP method on username/${req.params.articleId} resource`,
-    );
-});
-
-/* Delete specific article */
-app.delete('/:username/:articleId', (req, res) => {
-    return res.send(
-        `DELETE HTTP method on username/${req.params.articleId} resource`,
-    );
-});
+// Users
 
 /* Get user profile */
 app.get('/:username/profile', (req, res) => {
@@ -69,9 +48,35 @@ app.delete('/:username/profile', (req, res) => {
         `DELETE HTTP method on user/${req.params.userId}/profile resource`,
     );
 });
-  
 
-  
+// Articles
+
+/* Get specific article */
+app.get('/:username/:articleId', (req, res) => {
+    return res.send('Received a GET HTTP method');
+});
+
+/* Compose article */
+app.post('/:username/compose', (req, res) => {
+    return res.send(
+        `POST HTTP method on /compose resource`,
+    );
+});
+
+/* Update specific article */
+app.put('/:username/:articleId', (req, res) => {
+    return res.send(
+        `PUT HTTP method on username/${req.params.articleId} resource`,
+    );
+});
+
+/* Delete specific article */
+app.delete('/:username/:articleId', (req, res) => {
+    return res.send(
+        `DELETE HTTP method on username/${req.params.articleId} resource`,
+    );
+});
+
 app.listen(process.env.PORT, () =>
   console.log(`Example app listening on port ${process.env.PORT}!`),
 );
