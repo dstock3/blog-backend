@@ -1,9 +1,10 @@
 import 'dotenv/config';
-import models from './models';
 import routes from './routes';
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import Users from './models/users'
+import Articles from './models/articles'
 
 const app = express();
 
@@ -15,6 +16,7 @@ mongoose.connect(process.env.mongoDB, {useNewUrlParser: true, useUnifiedTopology
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+/*
 app.use((req, res, next) => {
   req.context = {
       models,
@@ -22,9 +24,10 @@ app.use((req, res, next) => {
   };
   next();
 });
+*/
 
 app.use('/', routes.articles);
-app.use('/', routes.user);
+app.use('/', routes.users);
 app.use('/', routes.session);
 
 app.listen(process.env.PORT, () =>
