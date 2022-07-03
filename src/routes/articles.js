@@ -1,5 +1,7 @@
-const router = require('express').Router();
-const uuidv4 = require('uuid');
+import { v4 as uuidv4 } from 'uuid';
+import { Router } from 'express';
+
+const router = Router();
 
 // Articles
 
@@ -29,4 +31,4 @@ router.delete('/:username/:articleId', (req, res) => {
     );
 });
 
-module.exports = router;
+export default router;

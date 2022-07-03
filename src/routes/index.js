@@ -1,11 +1,9 @@
-const router = require('express').Router();
-const session = require('./session');
-const user = require('./user');
-const articles = require('./articles');
+import session from './session';
+import user from './user';
+import articles from './articles';
 
-/* Get home page */
-router.get('/', (req, res) => {
-    return res.send('Received a GET HTTP method');
-});
-
-module.exports = router;
+export default {
+    session,
+    user,
+    articles,
+};

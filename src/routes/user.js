@@ -1,5 +1,12 @@
-const router = require('express').Router();
-const uuidv4 = require('uuid');
+import { v4 as uuidv4 } from 'uuid';
+import { Router } from 'express';
+
+const router = Router();
+
+/* Get home page */
+router.get('/', (req, res) => {
+    return res.send('Received a GET HTTP method');
+});
 
 // Users
 
@@ -35,5 +42,4 @@ router.delete('/:username/profile', (req, res) => {
     );
 });
 
-
-module.exports = router;
+export default router;
