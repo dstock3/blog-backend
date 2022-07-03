@@ -15,7 +15,6 @@ router.get('/:username', (req, res) => {
     return res.send('Received a GET HTTP method');
 });
 
-
 /* Get user profile */
 router.get('/:username/profile', (req, res) => {
     return res.send('Received a GET HTTP method');
@@ -24,7 +23,7 @@ router.get('/:username/profile', (req, res) => {
 /* Create user profile */
 router.post('/register', (req, res) => {
     return res.send(
-        `POST HTTP method on user/${req.params.username} resource`,
+        `POST HTTP method on /register resource`,
     );
 });
 
