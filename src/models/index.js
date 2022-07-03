@@ -22,7 +22,7 @@ let messages = {
     },
 };
   
-export default {
+module.exports = {
     users,
     messages,
 };
