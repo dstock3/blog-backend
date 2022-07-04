@@ -8,6 +8,16 @@ router.get('/', (req, res) => {
     return res.send('Received a GET HTTP method');
 });
 
+/* Get for Login page */
+router.get('/login', (req, res) => {
+    return res.send('Received a GET HTTP method');
+});
+
+/* Post for Login page */
+router.post('/login', (req, res) => {
+    return res.send('Received a POST HTTP method');
+});
+
 // Users
 
 /* Get user landing page */
