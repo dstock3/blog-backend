@@ -8,8 +8,7 @@ const ArticleSchema = new Schema(
     img: {type: String},
     imgDesc: {type: String, maxLength: 150},
     date: {type: Date, required: true},
-    content: {type: String, required: true},
-    comments: {type: Array}
+    content: {type: String, required: true}
   }
 );
 
@@ -21,4 +20,4 @@ ArticleSchema
 });
 
 //Export model
-module.exports = mongoose.model('Articles', ArticleSchema);
+export default mongoose.model('Article', ArticleSchema);

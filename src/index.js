@@ -1,10 +1,8 @@
 import 'dotenv/config';
-import routes from './routes';
+import routes from './routes'
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import Users from './models/users'
-import Articles from './models/articles'
 
 const app = express();
 
