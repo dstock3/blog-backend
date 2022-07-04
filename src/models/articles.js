@@ -20,4 +20,4 @@ ArticleSchema
 });
 
 //Export model
-export default mongoose.model('Article', ArticleSchema);
+export default mongoose.model('Articles', ArticleSchema);

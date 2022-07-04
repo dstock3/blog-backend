@@ -3,6 +3,8 @@ import routes from './routes'
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import User from './models/users'
+import Article from './models/articles'
 
 const app = express();
 
