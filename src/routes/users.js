@@ -1,12 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from 'express';
+import user_controller from '../controllers/userContoller'
 
 const router = Router();
 
 /* Get home page */
-router.get('/', (req, res) => {
-    return res.send('Received a GET HTTP method');
-});
+router.get('/', user_controller.index);
 
 /* Get for Login page */
 router.get('/login', (req, res) => {
