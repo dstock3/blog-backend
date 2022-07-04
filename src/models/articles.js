@@ -21,4 +21,4 @@ ArticleSchema
 });
 
 //Export model
-module.exports = mongoose.model('Articles', UserSchema);
+module.exports = mongoose.model('Articles', ArticleSchema);
