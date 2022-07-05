@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import compression from 'compression';
+import helmet from 'helmet';
 import routes from './routes'
 import express from 'express';
 import cors from 'cors';
@@ -26,7 +27,7 @@ app.use((req, res, next) => {
   next();
 });
 */
-
+app.use(helmet());
 app.use(compression());
 
 app.use('/', routes.articles);
