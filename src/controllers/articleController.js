@@ -14,8 +14,6 @@ const article_update_post = function(req, res, next) {
 }
 
 const article_delete_post = function(req, res, next) {
-    console.log("post delete")
-
     const articleId = req.body.articleId
     
     User.findOneAndUpdate(

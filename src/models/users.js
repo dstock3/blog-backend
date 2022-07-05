@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
   {
-    profileName: {type: String, required: true, minLength: 5, maxLength: 100},
+    profileName: {type: String, required: true, minLength: 4, maxLength: 25},
+    password: {type: String, required: true, minLength: 5 },
     admin: {type: Boolean, default: false},
     profileDesc: {type: String, required: true, maxLength: 350},
     profilePic: {type: String},

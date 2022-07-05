@@ -2,6 +2,7 @@ import User from '../models/users.js'
 import Article from '../models/articles.js';
 import async from 'async';
 import { body, validationResult } from "express-validator";
+import bcrypt from 'bcryptjs';
 
 const index = async function(req, res, next) {
     try { let isLoggedIn = false;
@@ -16,12 +17,57 @@ const index = async function(req, res, next) {
 };
 
 const login_post = function(req, res, next) {
-    console.log("login post")
+  console.log("login post")
 }
 
-const register_post = function(req, res, next) {
-    console.log("register post")
-}
+const register_post = [
+  // Validate fields
+  body('username').trim().isLength({min: 2}).escape().withMessage('At minimum, your username must be 4 characters long'),
+  body('password').trim().isLength({min: 5}).escape().withMessage('At minimum, your password must be 5 characters long'),
+  body('confirmPassword').trim().isLength({min: 5}).escape().withMessage('At minimum, your password must be 5 characters long')
+  .custom( async(value, {req }) => {
+    if(value !== req.body.password) {
+        throw new Error('Passwords do not match')
+    }
+    return true;
+  }),
+
+  async (req, res, next) => {
+    const errors = validationResult(req)
+    
+    if (!errors.isEmpty()) {
+      return res.send({ errors: errors.errors })
+    }
+
+    try {
+      const userExists = await User.findOne({username: req.body.username});
+
+      if (userExists !== null) {
+         return res.send({ userExists: true })
+      }
+        bcrypt.hash(req.body.password, 12, (err, hashedPassword) => {
+
+        const user = new User({
+          profileName: req.body.profileName,
+          password: hashedPassword,
+          admin: false,
+          profileDesc: req.body.profileDesc,
+          themePref: req.body.themePref,
+          layoutPref: req.body.layoutPref,
+          blogTitle: req.body.blogTitle,
+          dateJoined: req.body.dateJoined
+        })
+
+        user.save(err => {
+          if (err) { return next(err) }
+          res.send('registration successful')
+        })
+      })
+    } catch(err) { 
+      return next(err) 
+    }
+  }
+];
 
 const user_update = async function(req, res, next) {
     const userToUpdate = await User.findOne({_id: res.locals.currentUser._id})
