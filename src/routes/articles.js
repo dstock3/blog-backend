@@ -7,12 +7,12 @@ const router = Router();
 // Articles
 
 /* Compose article */
-router.post('/:username/compose', article_controller.article_create_post);
+router.post('/article/compose', article_controller.article_create_post);
 
 /* Update specific article */
-router.put('/:username/:articleId', article_controller.article_update_post);
+router.put('/article/:articleId', article_controller.article_update_post);
 
 /* Delete specific article */
-router.delete('/:username/:articleId', article_controller.article_delete_post);
+router.delete('/article/:articleId', article_controller.article_delete_post);
 
 export default router;

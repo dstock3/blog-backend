@@ -7,15 +7,8 @@ const router = Router();
 /* Get home page */
 router.get('/', user_controller.index);
 
-/* Get for Login page */
-router.get('/login', (req, res) => {
-    return res.send('Received a GET HTTP method');
-});
-
 /* Post for Login page */
-router.post('/login', (req, res) => {
-    return res.send('Received a POST HTTP method');
-});
+router.post('/login', user_controller.login_post);
 
 // Users
 
@@ -25,29 +18,17 @@ router.get('/:username', (req, res) => {
 });
 
 /* Get user profile */
-router.get('/:username/profile', (req, res) => {
+router.get('/:username', (req, res) => {
     return res.send('Received a GET HTTP method');
 });
 
 /* Create user profile */
-router.post('/register', (req, res) => {
-    return res.send(
-        `POST HTTP method on /register resource`,
-    );
-});
+router.post('/register', user_controller.register_post);
 
 /* Update user profile */
-router.put('/:username/profile', (req, res) => {
-    return res.send(
-        `PUT HTTP method on user/${req.params.username}/profile resource`,
-    );
-});
+router.put('/:username', user_controller.user_update);
 
 /* Delete user profile */
-router.delete('/:username/profile', (req, res) => {
-    return res.send(
-        `DELETE HTTP method on user/${req.params.userId}/profile resource`,
-    );
-});
+router.delete('/:username', user_controller.user_delete);
 
 export default router;
