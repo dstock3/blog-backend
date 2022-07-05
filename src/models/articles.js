@@ -8,7 +8,8 @@ const ArticleSchema = new Schema(
     img: {type: String},
     imgDesc: {type: String, maxLength: 150},
     date: {type: Date, required: true},
-    content: {type: String, required: true}
+    content: {type: String, required: true},
+    comments: {type: Array}
   }
 );
 
