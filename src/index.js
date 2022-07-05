@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import compression from 'compression';
 import routes from './routes'
 import express from 'express';
 import cors from 'cors';
@@ -25,6 +26,8 @@ app.use((req, res, next) => {
   next();
 });
 */
+
+app.use(compression());
 
 app.use('/', routes.articles);
 app.use('/', routes.users);

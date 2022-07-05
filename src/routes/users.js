@@ -12,16 +12,6 @@ router.post('/login', user_controller.login_post);
 
 // Users
 
-/* Get user landing page */
-router.get('/:username', (req, res) => {
-    return res.send('Received a GET HTTP method');
-});
-
-/* Get user profile */
-router.get('/:username', (req, res) => {
-    return res.send('Received a GET HTTP method');
-});
-
 /* Create user profile */
 router.post('/register', user_controller.register_post);
 
