@@ -1,9 +1,7 @@
-import session from './session';
-import users from './users';
-import articles from './articles';
+import users from './users.js';
+import articles from './articles.js';
 
 export default {
-    session,
     users,
     articles,
 };

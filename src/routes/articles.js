@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from 'express';
-import article_controller from '../controllers/articleController'
+import article_controller from '../controllers/articleController.js'
 
 const router = Router();
 

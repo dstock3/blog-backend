@@ -1,5 +1,5 @@
-import User from '../models/users'
-import Article from '../models/articles';
+import User from '../models/users.js'
+import Article from '../models/articles.js';
 import async from 'async';
 import { body, validationResult } from "express-validator";
 
