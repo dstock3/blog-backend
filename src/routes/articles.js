@@ -10,7 +10,7 @@ const router = Router();
 router.post('/article/compose', article_controller.article_create_post);
 
 /* Update specific article */
-router.put('/article/:articleId', article_controller.article_update_post);
+router.put('/article/:articleId', article_controller.article_update_put);
 
 /* Delete specific article */
 router.delete('/article/:articleId', article_controller.article_delete_post);

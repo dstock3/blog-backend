@@ -8,8 +8,14 @@ const article_create_post = function(req, res, next) {
 
 }
 
-const article_update_post = function(req, res, next) {
+const article_update_put = function(req, res, next) {
     console.log("post update")
+    const postToUpdate = await Article.findOne({_id: req.req.body.articleId})
+  
+    userToUpdate.save(err =>{
+      if (err) { return next(err) }
+      res.send("update successful")
+    })
 
 }
 
@@ -29,4 +35,4 @@ const article_delete_post = function(req, res, next) {
   })
 }
 
-export default { article_create_post, article_update_post, article_delete_post }
+export default { article_create_post, article_update_put, article_delete_post }
