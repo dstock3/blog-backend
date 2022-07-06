@@ -3,16 +3,45 @@ import Article from '../models/articles.js';
 import async from 'async';
 import { body, validationResult } from "express-validator";
 
-const article_create_post = function(req, res, next) {
-    console.log("post initiated")
+const article_create_post = [
+  body('title').trim().isLength({max: 150}).escape().withMessage('The title of your article cannot exceed 150 characters.'),
+  body('imgDesc').trim().isLength({max: 150}).escape().withMessage('Your image description cannot exceed 150 characters.'),
+  body('date').not().isEmpty().trim().escape().withMessage('Publication date must be included.'),
+  body('content').not().isEmpty().trim().escape().withMessage('Please include the content of your article.'),
 
-}
+  async (req, res, next) => {
+    const errors = validationResult(req)
+    
+    if (!errors.isEmpty()) {
+      return res.send({ errors: errors.errors })
+    }
+
+    try {
+      const article = new Article({
+        title: req.body.title,
+        img: req.body.img,
+        imgDesc: req.body.imgDesc,
+        date: req.body.date,
+        content: req.body.content,
+        blogTitle: req.body.blogTitle
+      })
+
+      article.save(err => {
+        if (err) { return next(err) }
+        res.send('article posted')
+      })
+
+    } catch(err) { 
+      return next(err) 
+    }
+  }
+];
 
 const article_update_put = function(req, res, next) {
     console.log("post update")
     const postToUpdate = await Article.findOne({_id: req.req.body.articleId})
   
-    userToUpdate.save(err =>{
+    postToUpdate.save(err =>{
       if (err) { return next(err) }
       res.send("update successful")
     })
