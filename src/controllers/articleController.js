@@ -6,7 +6,6 @@ import { body, validationResult } from "express-validator";
 const article_create_post = [
   body('title').trim().isLength({max: 150}).escape().withMessage('The title of your article cannot exceed 150 characters.'),
   body('imgDesc').trim().isLength({max: 150}).escape().withMessage('Your image description cannot exceed 150 characters.'),
-  body('date').not().isEmpty().trim().escape().withMessage('Publication date must be included.'),
   body('content').not().isEmpty().trim().escape().withMessage('Please include the content of your article.'),
 
   async (req, res, next) => {
@@ -21,7 +20,6 @@ const article_create_post = [
         title: req.body.title,
         img: req.body.img,
         imgDesc: req.body.imgDesc,
-        date: req.body.date,
         content: req.body.content,
         blogTitle: req.body.blogTitle
       })

@@ -22,7 +22,7 @@ const login_post = function(req, res, next) {
 
 const register_post = [
   // Validate fields
-  body('username').trim().isLength({min: 2}).escape().withMessage('At minimum, your username must be 4 characters long'),
+  body('profileName').trim().isLength({min: 4}).escape().withMessage('At minimum, your username must be 4 characters long'),
   body('password').trim().isLength({min: 5}).escape().withMessage('At minimum, your password must be 5 characters long'),
   body('confirmPassword').trim().isLength({min: 5}).escape().withMessage('At minimum, your password must be 5 characters long')
   .custom( async(value, {req }) => {
@@ -40,7 +40,7 @@ const register_post = [
     }
 
     try {
-      const userExists = await User.findOne({username: req.body.username});
+      const userExists = await User.findOne({profileName: req.body.profileName});
 
       if (userExists !== null) {
          return res.send({ userExists: true })
@@ -55,7 +55,6 @@ const register_post = [
           themePref: req.body.themePref,
           layoutPref: req.body.layoutPref,
           blogTitle: req.body.blogTitle,
-          dateJoined: req.body.dateJoined
         })
 
         user.save(err => {
