@@ -6,7 +6,7 @@ import { body, validationResult } from "express-validator";
 const article_create_post = [
   body('title').trim().isLength({max: 150}).escape().withMessage('The title of your article cannot exceed 150 characters.'),
   body('imgDesc').trim().isLength({max: 150}).escape().withMessage('Your image description cannot exceed 150 characters.'),
-  body('content').not().isEmpty().trim().escape().withMessage('Please include the content of your article.'),
+  body('content').isEmpty().trim().escape().withMessage('Please include the content of your article.'),
 
   async (req, res, next) => {
     const errors = validationResult(req)
