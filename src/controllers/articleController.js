@@ -16,7 +16,7 @@ const article_create_post = [
       return res.json({ errors: errors.errors })
     }
 
-    jwt.verify(req.token, 'secretkey', async (err, authData) => {
+    jwt.verify(req.token, process.env.secretkey, async (err, authData) => {
       if(err) { 
         res.sendStatus(403)
       } else {
