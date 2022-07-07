@@ -17,7 +17,7 @@ const article_create_post = [
     }
 
     jwt.verify(req.token, process.env.secretkey, async (err, authData) => {
-      if(err) { 
+      if (err) { 
         res.json({ message: "login validation check failed" })
       } else {
         try {
@@ -44,31 +44,47 @@ const article_create_post = [
   }
 ];
 
-const article_update_put = async function(req, res, next) {
-  console.log("post update")
-  const postToUpdate = await Article.findOne({_id: req.req.body.articleId})
+const article_update_put = function(req, res, next) {
+  jwt.verify(req.token, process.env.secretkey, async (err, authData) => {
+    if (err) { 
+      res.json({ message: "login validation check failed" })
+    } else {
+      const postToUpdate = await Article.findOne({_id: req.req.body.articleId})
 
-  postToUpdate.save(err =>{
-    if (err) { return next(err) }
-    res.json({ message: "update successful" })
-  })
-}
-
-const article_delete_post = function(req, res, next) {
-  console.log("post deleted")
-  const articleId = req.body.articleId
-    
-  User.findOneAndUpdate(
-    {_id: req.body.userId},
-    {$pull: { articles: req.body.articleId }
-    }, function(err, id) {
-      if (err) { return next(err) }
-      
-      Article.findByIdAndDelete(articleId, function(err, docs){
+      postToUpdate.save(err => {
         if (err) { return next(err) }
-        res.json({ message: "article deleted" });
-      })
-    })  
-}
+        res.json({ 
+          message: "update successful", 
+          authData 
+        })
+      });
+    }
+  })
+};
+  
+const article_delete_post = function(req, res, next) {
+  jwt.verify(req.token, process.env.secretkey, async (err, authData) => {
+    if (err) { 
+      res.json({ message: "login validation check failed" })
+    } else {
+      const articleId = req.body.articleId
 
+      User.findOneAndUpdate(
+        {_id: req.body.userId},
+        {$pull: { articles: req.body.articleId }
+        }, function(err, id) {
+          if (err) { return next(err) }
+          
+          Article.findByIdAndDelete(articleId, function(err, docs){
+            if (err) { return next(err) }
+            res.json({ 
+              message: "article deleted", 
+              authData 
+            });
+          });
+        });
+    };
+  });
+}
+  
 export default { article_create_post, article_update_put, article_delete_post }
