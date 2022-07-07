@@ -12,7 +12,7 @@ const article_create_post = [
     const errors = validationResult(req)
     
     if (!errors.isEmpty()) {
-      return res.send({ errors: errors.errors })
+      return res.json({ errors: errors.errors })
     }
 
     try {
@@ -27,7 +27,7 @@ const article_create_post = [
 
       article.save(err => {
         if (err) { return next(err) }
-        res.send('article posted')
+        res.json({ message: 'article posted' })
       })
 
     } catch(err) { 
@@ -42,7 +42,7 @@ const article_update_put = async function(req, res, next) {
 
   postToUpdate.save(err =>{
     if (err) { return next(err) }
-    res.send("update successful")
+    res.json({ message: "update successful" })
   })
 }
 
@@ -58,7 +58,7 @@ const article_delete_post = function(req, res, next) {
       
       Article.findByIdAndDelete(articleId, function(err, docs){
         if (err) { return next(err) }
-        res.send("article deleted");
+        res.json({ message: "article deleted" });
       })
     })  
 }

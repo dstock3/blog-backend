@@ -11,7 +11,10 @@ const index = async function(req, res, next) {
         const results = await User.find({}, 'profileName admin profileDesc profilePic themePref layoutPref blogTitle dateJoined articles')
         .populate('articles');
 
-        res.send({users: results, isLoggedIn: isLoggedIn });
+        res.json({
+          users: results, 
+          isLoggedIn: isLoggedIn 
+        });
 
     } catch(err) { return next(err) }
 };
@@ -36,14 +39,14 @@ const register_post = [
     const errors = validationResult(req)
     
     if (!errors.isEmpty()) {
-      return res.send({ errors: errors.errors })
+      return res.json({ errors: errors.errors })
     }
 
     try {
       const userExists = await User.findOne({profileName: req.body.profileName});
 
       if (userExists !== null) {
-         return res.send({ userExists: true })
+         return res.json({ userExists: true })
       }
         bcrypt.hash(req.body.password, 12, (err, hashedPassword) => {
 
@@ -59,7 +62,9 @@ const register_post = [
 
         user.save(err => {
           if (err) { return next(err) }
-          res.send('registration successful')
+          res.json({
+            message: 'registration successful'
+          })
         })
       })
     } catch(err) { 
@@ -73,7 +78,7 @@ const user_update = async function(req, res, next) {
 
     userToUpdate.save(err =>{
       if (err) { return next(err) }
-      res.send("update successful")
+      res.json({ message: "update successful" })
     })
 }
 
