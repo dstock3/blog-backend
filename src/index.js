@@ -5,8 +5,7 @@ import routes from './routes/index.js'
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import User from './models/users.js'
-import Article from './models/articles.js'
+import './auth/passport.js'
 
 const app = express();
 
@@ -18,20 +17,10 @@ mongoose.connect(process.env.URI, {useNewUrlParser: true, useUnifiedTopology: tr
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-/*
-app.use((req, res, next) => {
-  req.context = {
-      models,
-      me: models.users[1],
-  };
-  next();
-});
-*/
-
 app.use(helmet());
 app.use(compression());
 
-app.use('/', routes.articles);
+app.use('/article/', routes.articles);
 app.use('/', routes.users);
 
 app.listen(process.env.PORT, () =>

@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from 'express';
 import user_controller from '../controllers/userController.js'
-import { verifyToken } from '../controllers/userController.js'
+import { verifyToken } from '../auth/verify.js'
 
 const router = Router();
 

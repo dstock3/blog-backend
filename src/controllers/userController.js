@@ -4,18 +4,7 @@ import async from 'async';
 import { body, validationResult } from "express-validator";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-
-// Verify Token
-export function verifyToken(req, res, next) {
-  const bearerHeader = req.headers['authorization'];
-  
-  if(typeof bearerHeader !== 'undefined') {
-      req.token = bearerHeader.split(' ')[1];
-      next();
-  } else {
-      res.sendStatus(403)
-  }
-}
+import passport from 'passport';
 
 const index = async function(req, res, next) {
     try { let isLoggedIn = false;
@@ -32,18 +21,22 @@ const index = async function(req, res, next) {
     } catch(err) { return next(err) }
 };
 
-const login_post = [
+const login_post = function (req, res, next) {
+  passport.authenticate("local", { session: false }, async (err, user) => {
+    if (err || !user) {
+      return res.status(401).json({
+        message: "Incorrect Username or Password",
+        user,
+      });
+    }
 
-  //need to auth user in login post
-
-  async (req, res, next) => {
     jwt.sign({user}, process.env.secretkey, { expiresIn: '30s'}, (err, token) => {
       res.json({
           token
       });
     })
-  }
-] 
+  });
+};
 
 const register_post = [
   // Validate fields
@@ -97,7 +90,7 @@ const register_post = [
 
 const user_update = function(req, res, next) {
   jwt.verify(req.token, process.env.secretkey, async (err, authData) => {
-    if(err) { 
+    if (err) { 
       res.json({ message: "login validation check failed" })
     } else {
       const userToUpdate = await User.findOne({_id: res.locals.currentUser._id})
