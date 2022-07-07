@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from 'express';
 import user_controller from '../controllers/userController.js'
+import { verifyToken } from '../controllers/userController.js'
 
 const router = Router();
 
@@ -16,9 +17,9 @@ router.post('/login', user_controller.login_post);
 router.post('/register', user_controller.register_post);
 
 /* Update user profile */
-router.put('/:username', user_controller.user_update);
+router.put('/:username', verifyToken, user_controller.user_update);
 
 /* Delete user profile */
-router.delete('/:username', user_controller.user_delete);
+router.delete('/:username', verifyToken, user_controller.user_delete);
 
 export default router;

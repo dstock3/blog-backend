@@ -3,6 +3,19 @@ import Article from '../models/articles.js';
 import async from 'async';
 import { body, validationResult } from "express-validator";
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+
+// Verify Token
+export function verifyToken(req, res, next) {
+  const bearerHeader = req.headers['authorization'];
+  
+  if(typeof bearerHeader !== 'undefined') {
+      req.token = bearerHeader.split(' ')[1];
+      next();
+  } else {
+      res.sendStatus(403)
+  }
+}
 
 const index = async function(req, res, next) {
     try { let isLoggedIn = false;
@@ -19,9 +32,18 @@ const index = async function(req, res, next) {
     } catch(err) { return next(err) }
 };
 
-const login_post = function(req, res, next) {
-  console.log("login post")
-}
+const login_post = [
+
+  //need to auth user in login post
+
+  async (req, res, next) => {
+    jwt.sign({user}, process.env.secretkey, { expiresIn: '30s'}, (err, token) => {
+      res.json({
+          token
+      });
+    })
+  }
+] 
 
 const register_post = [
   // Validate fields
@@ -73,13 +95,18 @@ const register_post = [
   }
 ];
 
-const user_update = async function(req, res, next) {
-    const userToUpdate = await User.findOne({_id: res.locals.currentUser._id})
-
-    userToUpdate.save(err =>{
-      if (err) { return next(err) }
-      res.json({ message: "update successful" })
-    })
+const user_update = function(req, res, next) {
+  jwt.verify(req.token, process.env.secretkey, async (err, authData) => {
+    if(err) { 
+      res.json({ message: "login validation failed" })
+    } else {
+      const userToUpdate = await User.findOne({_id: res.locals.currentUser._id})
+      userToUpdate.save(err =>{
+        if (err) { return next(err) }
+        res.json({ message: "update successful", authData })
+      });
+    };
+  });
 }
 
 const user_delete = function(req, res, next) {

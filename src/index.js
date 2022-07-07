@@ -27,12 +27,12 @@ app.use((req, res, next) => {
   next();
 });
 */
+
 app.use(helmet());
 app.use(compression());
 
 app.use('/', routes.articles);
 app.use('/', routes.users);
-
 
 app.listen(process.env.PORT, () =>
   console.log(`Example app listening on port ${process.env.PORT}!`),
