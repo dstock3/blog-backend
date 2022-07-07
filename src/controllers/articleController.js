@@ -18,7 +18,7 @@ const article_create_post = [
 
     jwt.verify(req.token, process.env.secretkey, async (err, authData) => {
       if(err) { 
-        res.sendStatus(403)
+        res.json({ message: "login validation check failed" })
       } else {
         try {
           const article = new Article({

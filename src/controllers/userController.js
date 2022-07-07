@@ -98,12 +98,15 @@ const register_post = [
 const user_update = function(req, res, next) {
   jwt.verify(req.token, process.env.secretkey, async (err, authData) => {
     if(err) { 
-      res.json({ message: "login validation failed" })
+      res.json({ message: "login validation check failed" })
     } else {
       const userToUpdate = await User.findOne({_id: res.locals.currentUser._id})
       userToUpdate.save(err =>{
         if (err) { return next(err) }
-        res.json({ message: "update successful", authData })
+        res.json({ 
+          message: "update successful", 
+          authData 
+        })
       });
     };
   });
