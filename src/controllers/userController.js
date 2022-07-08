@@ -106,7 +106,14 @@ const user_update = function(req, res, next) {
 }
 
 const user_delete = function(req, res, next) {
-    console.log("user delete")
+      
+  User.findByIdAndDelete(req.body.userId, function(err, docs){
+    if (err) { return next(err) }
+    res.json({
+      message: "user deleted"
+    })
+  })
+
 }
 
 
