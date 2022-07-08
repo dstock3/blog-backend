@@ -30,7 +30,7 @@ const login_post = function (req, res, next) {
       });
     }
 
-    jwt.sign({user}, process.env.secretkey, { expiresIn: '30s'}, (err, token) => {
+    jwt.sign({user}, process.env.secretkey, { expiresIn: '1h'}, (err, token) => {
       res.json({
           token
       });
