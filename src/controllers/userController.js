@@ -106,15 +106,19 @@ const user_update = function(req, res, next) {
 }
 
 const user_delete = function(req, res, next) {
-      
-  User.findByIdAndDelete(req.body.userId, function(err, docs){
-    if (err) { return next(err) }
-    res.json({
-      message: "user deleted"
-    })
-  })
-
+  jwt.verify(req.token, process.env.secretkey, async (err, authData) => {
+    if (err) {
+      res.json({ message: "login validation check failed" })
+    } else {
+      User.findByIdAndDelete(req.body.userId, function(err, docs){
+        if (err) { return next(err) }
+        res.json({
+          message: "user deleted",
+          authData
+        })
+      });
+    };
+  });
 }
-
 
 export default { index, login_post, register_post, user_update, user_delete }
