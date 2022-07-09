@@ -30,12 +30,12 @@ const login_post = function (req, res) {
       });
     }
 
-    jwt.sign({ _id: user._id, username: user.username }, process.env.secretkey, { expiresIn: '15m' }, (err, token) => {
+    jwt.sign({ _id: user._id, username: user.profileName }, process.env.secretkey, { expiresIn: '15m' }, (err, token) => {
       if (err) return res.status(400).json(err);
       
       res.json({
           token,
-          user: { _id: user._id, username: user.username }
+          user: { _id: user._id, username: user.profileName }
       });
     })
   }) (req, res);
