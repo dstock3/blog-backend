@@ -21,8 +21,8 @@ const index = async function(req, res, next) {
     } catch(err) { return next(err) }
 };
 
-const login_post = function (req, res, next) {
-  passport.authenticate("local", { session: false }, async (err, user) => {
+const login_post = function (req, res) {
+  passport.authenticate("local", { session: false }, (err, user) => {
     if (err || !user) {
       return res.status(401).json({
         message: "Incorrect Username or Password",
@@ -30,12 +30,15 @@ const login_post = function (req, res, next) {
       });
     }
 
-    jwt.sign({user}, process.env.secretkey, { expiresIn: '1h'}, (err, token) => {
+    jwt.sign({ _id: user._id, username: user.username }, process.env.secretkey, { expiresIn: '15m' }, (err, token) => {
+      if (err) return res.status(400).json(err);
+      
       res.json({
-          token
+          token,
+          user: { _id: user._id, username: user.username }
       });
     })
-  });
+  }) (req, res);
 };
 
 const register_post = [
