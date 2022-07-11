@@ -43,15 +43,24 @@ const login_post = function (req, res) {
 
 const register_post = [
   // Validate fields
-  body('profileName').trim().isLength({min: 4}).escape().withMessage('At minimum, your username must be 4 characters long'),
-  body('password').trim().isLength({min: 5}).escape().withMessage('At minimum, your password must be 5 characters long'),
-  body('confirmPassword').trim().isLength({min: 5}).escape().withMessage('At minimum, your password must be 5 characters long')
-  .custom( async(value, {req }) => {
-    if(value !== req.body.password) {
-        throw new Error('Passwords do not match')
-    }
-    return true;
-  }),
+  body('profileName', 'Your username must be at least four characters long.')
+    .trim()
+    .isLength({ min: 4 })
+    .escape(),
+  body('password', 'Your password must be at least five characters long.')
+    .trim()
+    .isLength({ min: 5 })
+    .escape(),
+  body('confirmPassword', 'Your password must be at least five characters long.')
+    .trim()
+    .isLength({ min: 5 })
+    .escape()
+    .custom(async (value, {req }) => {
+      if(value !== req.body.password) {
+          throw new Error('Passwords do not match')
+      }
+      return true;
+    }),
 
   async (req, res, next) => {
     const errors = validationResult(req)
