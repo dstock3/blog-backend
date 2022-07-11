@@ -55,11 +55,12 @@ const register_post = [
     .trim()
     .isLength({ min: 5 })
     .escape()
-    .custom(async (value, {req }) => {
-      if(value !== req.body.password) {
-          throw new Error('Passwords do not match')
-      }
-      return true;
+    .custom(
+      async (value, {req }) => {
+        if(value !== req.body.password) {
+            throw new Error('Passwords do not match')
+        }
+        return true;
     }),
 
   async (req, res, next) => {
