@@ -21,24 +21,15 @@ const index = async function(req, res, next) {
     } catch(err) { return next(err) }
 };
 
-const login_post = function (req, res) {
-  passport.authenticate("local", { session: false }, (err, user) => {
-    if (err || !user) {
-      return res.status(401).json({
-        message: "Incorrect Username or Password",
-        user,
-      });
-    }
+const login_post = async function (req, res) {
+  const user = await User.findOne({ profileName: req.body.username })
+  if(!user) return res.status(400).json({ message: "This username does not exist." });
 
-    jwt.sign({ _id: user._id, username: user.profileName }, process.env.secretkey, { expiresIn: '15m' }, (err, token) => {
-      if (err) return res.status(400).json(err);
-      
-      res.json({
-          token,
-          user: { _id: user._id, username: user.profileName }
-      });
-    })
-  }) (req, res);
+  const isValidPassword = await bcrypt.compare(req.body.password, user.password);
+  if (!isValidPassword) return res.status(401).send({ message: "Your login credentials are incorrect." });
+
+  const webToken = jwt.sign({ _id: user.id}, process.env.secretkey);
+  res.header('login-token', webToken).send(webToken)
 };
 
 const register_post = [
