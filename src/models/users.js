@@ -9,8 +9,8 @@ const UserSchema = new Schema(
     admin: {type: Boolean, default: false},
     profileDesc: {type: String, required: true, maxLength: 350},
     profilePic: {type: String},
-    themePref: {type: String, required: true, default: "dark"},
-    layoutPref: {type: String, required: true, default: "basic"},
+    themePref: {type: String, default: "dark"},
+    layoutPref: {type: String, default: "basic"},
     blogTitle: {type: String, required: true, maxLength: 100},
     dateJoined: {type: Date},
     articles: [{type: Schema.Types.ObjectId, ref: 'Articles'}]
