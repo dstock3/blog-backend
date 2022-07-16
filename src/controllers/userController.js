@@ -6,15 +6,14 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const index = async function(req, res, next) {
-    try { let isLoggedIn = false;
+    try {
         if (res.locals.currentUser) { isLoggedIn = true };
 
         const results = await User.find({}, 'profileName admin profileDesc profilePic themePref layoutPref blogTitle dateJoined articles')
         .populate('articles');
 
         res.json({
-          users: results, 
-          isLoggedIn: isLoggedIn 
+          users: results
         });
 
     } catch(err) { return next(err) }
