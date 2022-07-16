@@ -30,6 +30,10 @@ const login_post = async function (req, res) {
   res.header('login-token', webToken).send(webToken)
 };
 
+const logout_post = async function (req, res) {
+
+}
+
 const register_post = [
   // Validate fields
   body('profileName', 'Your username must be at least four characters long.')
@@ -123,4 +127,4 @@ const user_delete = function(req, res, next) {
   });
 }
 
-export default { index, login_post, register_post, user_update, user_delete }
+export default { index, login_post, logout_post, register_post, user_update, user_delete }
