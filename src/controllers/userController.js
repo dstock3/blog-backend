@@ -4,7 +4,6 @@ import async from 'async';
 import { body, validationResult } from "express-validator";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import passport from 'passport';
 
 const index = async function(req, res, next) {
     try { let isLoggedIn = false;
@@ -28,7 +27,7 @@ const login_post = async function (req, res) {
   const isValidPassword = await bcrypt.compare(req.body.password, user.password);
   if (!isValidPassword) return res.status(401).send({ message: "Your login credentials are incorrect." });
 
-  const webToken = jwt.sign({ _id: user.id}, process.env.secretkey);
+  const webToken = jwt.sign({ _id: user.id}, process.env.secretkey, { expiresIn: '15m'} );
   res.header('login-token', webToken).send(webToken)
 };
 

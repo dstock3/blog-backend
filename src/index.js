@@ -7,7 +7,6 @@ import helmet from 'helmet';
 import routes from './routes/index.js'
 import cors from 'cors';
 import mongoose from 'mongoose';
-import './auth/passport.js'
 
 const app = express();
 
