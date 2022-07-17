@@ -11,6 +11,7 @@ router.get('/', user_controller.index);
 /* Post for Login page */
 router.post('/login', user_controller.login_post);
 
+/* Post for Logout page */
 router.post('/logout', user_controller.logout_post)
 
 // Users

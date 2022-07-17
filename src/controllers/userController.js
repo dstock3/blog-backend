@@ -6,17 +6,17 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const index = async function(req, res, next) {
+  jwt.verify(req.token, process.env.secretkey, async (err, authData) => {
     try {
-        if (res.locals.currentUser) { isLoggedIn = true };
-
-        const results = await User.find({}, 'profileName admin profileDesc profilePic themePref layoutPref blogTitle dateJoined articles')
-        .populate('articles');
-
-        res.json({
-          users: results
-        });
+      const results = await User.find({}, 'profileName admin profileDesc profilePic themePref layoutPref blogTitle dateJoined articles')
+      .populate('articles');
+      res.json({
+        users: results,
+        authData
+      });
 
     } catch(err) { return next(err) }
+  });
 };
 
 const login_post = async function (req, res) {
