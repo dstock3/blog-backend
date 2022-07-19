@@ -20,9 +20,9 @@ router.post('/logout', user_controller.logout_post)
 router.post('/register', user_controller.register_post);
 
 /* Update user profile */
-router.put('/:username', verifyToken, user_controller.user_update);
+router.put('/:username/update', verifyToken, user_controller.user_update);
 
 /* Delete user profile */
-router.delete('/:username', verifyToken, user_controller.user_delete);
+router.delete('/:username/update', verifyToken, user_controller.user_delete);
 
 export default router;

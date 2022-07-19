@@ -1,10 +1,17 @@
-export function verifyToken(req, res, next) {
-    if(typeof req.headers['authorization'] !== 'undefined') {
-        req.token = req.headers['authorization'].split(' ')[1];
-        next();
-    } else {
-        res.sendStatus(403)
+import jwt from 'jsonwebtoken';
+
+function verify(req, res, next) {
+    const thisToken = req.header('auth-token');
+
+    if (!thisToken) return res.status(401).json({ message: 'Invalid credentials.' });
+
+    try {
+        const isVerified = jwt.verify(thisToken, process.env.secretkey);
+        res.user = isVerified;
+        next()
+    } catch(err) {
+        res.status(400).json({ message: 'This Web Token is Invalid' })
     }
 }
 
-  
+export default { verify }
