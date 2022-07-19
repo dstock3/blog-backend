@@ -131,8 +131,17 @@ const user_update = [
         return res.json({ errors: errors.errors })
       }
 
-      const userToUpdate = await User.findOne({_id: req.body.userId})
-      userToUpdate.save(err =>{
+      const updatedUser = new User({
+        profileName: req.body.profileName,
+        password: hashedPassword,
+        admin: false,
+        profileDesc: req.body.profileDesc,
+        themePref: req.body.themePref,
+        layoutPref: req.body.layoutPref,
+        blogTitle: req.body.blogTitle,
+      })
+
+      User.findByIdAndUpdate(req.body.userId, updatedUser, {}, function (err, thisUser) {
         if (err) { return next(err) }
         res.json({ 
           message: "update successful", 
