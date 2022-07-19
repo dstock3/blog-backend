@@ -3,20 +3,23 @@ import Article from '../models/articles.js';
 import async from 'async';
 import { body, validationResult } from "express-validator";
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 
 const index = async function(req, res, next) {
-  jwt.verify(req.token, process.env.secretkey, async (err, authData) => {
-    try {
-      const results = await User.find({}, 'profileName admin profileDesc profilePic themePref layoutPref blogTitle dateJoined articles')
-      .populate('articles');
+  try {
+    const results = await User.find({}, 'profileName admin profileDesc profilePic themePref layoutPref blogTitle dateJoined articles')
+    .populate('articles');
+
+    if (req.user) {
       res.json({
         users: results,
-        authData
+        user: req.user
       });
-
-    } catch(err) { return next(err) }
-  });
+    } else {
+      res.json({
+        users: results
+      });
+    }
+  } catch(err) { return next(err) }
 };
 
 const login_post = async function (req, res) {
@@ -94,37 +97,34 @@ const register_post = [
   }
 ];
 
-const user_update = function(req, res, next) {
-  jwt.verify(req.token, process.env.secretkey, async (err, authData) => {
-    if (err) { 
-      res.json({ message: "login validation check failed" })
-    } else {
-      const userToUpdate = await User.findOne({_id: res.locals.currentUser._id})
-      userToUpdate.save(err =>{
-        if (err) { return next(err) }
-        res.json({ 
-          message: "update successful", 
-          authData 
-        })
-      });
-    };
-  });
+const user_update = async function(req, res, next) {
+  if (err) { 
+    res.json({ message: "login validation check failed" })
+  } else {
+    const userToUpdate = await User.findOne({_id: res.locals.currentUser._id})
+    userToUpdate.save(err =>{
+      if (err) { return next(err) }
+      res.json({ 
+        message: "update successful", 
+        user: req.user 
+      })
+    });
+  };
+
 }
 
 const user_delete = function(req, res, next) {
-  jwt.verify(req.token, process.env.secretkey, async (err, authData) => {
-    if (err) {
-      res.json({ message: "login validation check failed" })
-    } else {
-      User.findByIdAndDelete(req.body.userId, function(err, docs){
-        if (err) { return next(err) }
-        res.json({
-          message: "user deleted",
-          authData
-        })
-      });
-    };
-  });
+  if (err) {
+    res.json({ message: "login validation check failed" })
+  } else {
+    User.findByIdAndDelete(req.body.userId, function(err, docs){
+      if (err) { return next(err) }
+      res.json({
+        message: "user deleted",
+        user: req.user
+      })
+    });
+  };
 }
 
 export default { index, login_post, logout_post, register_post, user_update, user_delete }
