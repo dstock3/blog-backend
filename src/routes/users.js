@@ -23,6 +23,6 @@ router.post('/register', user_controller.register_post);
 router.put('/:username/update', verify, user_controller.user_update);
 
 /* Delete user profile */
-router.delete('/:username/update', verify, user_controller.user_delete);
+router.delete('/:username/delete', verify, user_controller.user_delete);
 
 export default router;
