@@ -1,8 +1,8 @@
 import User from '../models/users.js'
-import Article from '../models/articles.js';
 import async from 'async';
 import { body, validationResult } from "express-validator";
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const index = async function(req, res, next) {
   try {
@@ -10,14 +10,16 @@ const index = async function(req, res, next) {
     .populate('articles');
 
     const webToken = req.header('auth-token');
-    const verified = jwt.verify(webToken, process.env.secretkey);
-    res.user = verified;
 
     if (!webToken) {
       res.json({
         users: results
       });
     } else {
+      
+      const verified = jwt.verify(webToken, process.env.secretkey);
+      res.user = verified;
+
       res.json({
         users: results,
         user: req.user
