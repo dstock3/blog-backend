@@ -9,14 +9,18 @@ const index = async function(req, res, next) {
     const results = await User.find({}, 'profileName admin profileDesc profilePic themePref layoutPref blogTitle dateJoined articles')
     .populate('articles');
 
-    if (req.user) {
+    const webToken = req.header('auth-token');
+    const verified = jwt.verify(webToken, process.env.secretkey);
+    res.user = verified;
+
+    if (!webToken) {
       res.json({
-        users: results,
-        user: req.user
+        users: results
       });
     } else {
       res.json({
-        users: results
+        users: results,
+        user: req.user
       });
     }
   } catch(err) { return next(err) }

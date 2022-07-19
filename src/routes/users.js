@@ -6,7 +6,7 @@ import { verify } from '../auth/verify.js'
 const router = Router();
 
 /* Get home page */
-router.get('/', verify, user_controller.index);
+router.get('/', user_controller.index);
 
 /* Post for Login page */
 router.post('/login', user_controller.login_post);
