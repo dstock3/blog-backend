@@ -4,17 +4,18 @@ import async from 'async';
 import { body, validationResult } from "express-validator";
 
 const article_create_post = [
+  /*
   body('title').trim().isLength({max: 150}).escape().withMessage('The title of your article cannot exceed 150 characters.'),
   body('imgDesc').trim().isLength({max: 150}).escape().withMessage('Your image description cannot exceed 150 characters.'),
   body('content').isEmpty().trim().escape().withMessage('Please include the content of your article.'),
-
+  */
   (req, res, next) => {
-    const errors = validationResult(req)
-    
+    //const errors = validationResult(req)
+    /*
     if (!errors.isEmpty()) {
       return res.json({ errors: errors.errors })
     }
-
+    */
     if (err) { 
       res.json({ message: "login validation check failed" })
     } else {
