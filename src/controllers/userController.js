@@ -9,18 +9,17 @@ const index = async function(req, res, next) {
     const results = await User.find({}, 'profileName admin profileDesc profilePic themePref layoutPref blogTitle dateJoined articles')
     .populate('articles');
 
-    const webToken = req.header('auth-token');
+    const webToken = req.header('login-token');
 
     if (!webToken) {
-      res.json({
+      res.status(200).json({
         users: results
       });
     } else {
-      
       const verified = jwt.verify(webToken, process.env.secretkey);
       res.user = verified;
 
-      res.json({
+      res.status(200).json({
         users: results,
         user: req.user
       });
