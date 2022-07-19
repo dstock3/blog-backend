@@ -102,21 +102,47 @@ const register_post = [
   }
 ];
 
-const user_update = async function(req, res, next) {
-  if (err) { 
-    res.json({ message: "login validation check failed" })
-  } else {
-    const userToUpdate = await User.findOne({_id: res.locals.currentUser._id})
-    userToUpdate.save(err =>{
-      if (err) { return next(err) }
-      res.json({ 
-        message: "update successful", 
-        user: req.user 
-      })
-    });
-  };
+const user_update = [
+  // Validate fields
+  body('profileName', 'Your username must be at least four characters long.')
+    .trim()
+    .isLength({ min: 4 })
+    .escape(),
+  body('password', 'Your password must be at least five characters long.')
+    .trim()
+    .isLength({ min: 5 })
+    .escape(),
+  body('confirmPassword', 'Your password must be at least five characters long.')
+    .trim()
+    .isLength({ min: 5 })
+    .escape()
+    .custom(
+      async (value, {req }) => {
+        if(value !== req.body.password) {
+            throw new Error('Passwords do not match')
+        }
+        return true;
+    }),
 
-}
+    async (req, res, next) => {
+      const errors = validationResult(req)
+      
+      if (!errors.isEmpty()) {
+        return res.json({ errors: errors.errors })
+      }
+
+      const userToUpdate = await User.findOne({_id: req.body.userId})
+      userToUpdate.save(err =>{
+        if (err) { return next(err) }
+        res.json({ 
+          message: "update successful", 
+          user: req.user 
+        })
+      });
+    }
+]
+
+
 
 const user_delete = function(req, res, next) {
   if (err) {
