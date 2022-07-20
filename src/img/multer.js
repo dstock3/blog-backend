@@ -14,4 +14,27 @@ const upload = multer({
     storage: storage
 })
 
-export { upload }
+const validateImage = file => {
+    const filetypes = ['jpg', 'png', 'webp', 'jpeg']
+    const imgMessages = []
+
+    if(!file) {
+        let msg = 'An image is required for this NPC.'
+        imgMessages.push(msg)
+    }
+
+    const extension = file.mimetype.split('/').pop();
+
+    if (!filetypes.includes(extension)) {
+        let msg = 'This image file is not valid. The following file types are accepted: jpg, jpeg, png, webp' 
+        imgMessages.push(msg)
+    }
+
+    if (file.size > 25000000) {
+        let msg = 'This image file is too large. Please upload an image smaller than 25 MB.'
+        imgMessages.push(msg)
+    }
+    return imgMessages
+}
+
+export { upload, validateImage }

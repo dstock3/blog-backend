@@ -17,7 +17,7 @@ const ArticleSchema = new Schema(
 ArticleSchema
 .virtual('url')
 .get(function () {
-  return '/:username/' + this.articleId;
+  return '/:username/' + this._id;
 });
 
 //Export model
