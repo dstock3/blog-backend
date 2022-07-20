@@ -18,11 +18,6 @@ const validateImage = file => {
     const filetypes = ['jpg', 'png', 'webp', 'jpeg']
     const imgMessages = []
 
-    if(!file) {
-        let msg = 'An image is required for this NPC.'
-        imgMessages.push(msg)
-    }
-
     const extension = file.mimetype.split('/').pop();
 
     if (!filetypes.includes(extension)) {
