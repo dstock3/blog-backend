@@ -2,6 +2,7 @@ import User from '../models/users.js';
 import Article from '../models/articles.js';
 import async from 'async';
 import { body, validationResult } from "express-validator";
+import { validateImage } from '../img/multer.js'
 
 const article_create_post = [
   /*

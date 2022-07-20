@@ -3,6 +3,7 @@ import async from 'async';
 import { body, validationResult } from "express-validator";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { validateImage } from '../img/multer.js'
 
 const index = async function(req, res, next) {
   try {
@@ -66,19 +67,27 @@ const register_post = [
 
   async (req, res, next) => {
     const errors = validationResult(req)
-    
-    if (!errors.isEmpty()) {
-      return res.json({ errors: errors.errors })
+
+    let imgMessages
+    let imgFilename
+
+    if (req.file) { 
+      imgMessages = validateImage(req.file)
+      imgFilename = req.file.originalname
     }
 
+    if (!errors.isEmpty() || (imgMessages.length > 0)) {
+      return res.json({ errors: errors.errors, imgErrors: imgMessages })
+    }
+    
     try {
       const userExists = await User.findOne({profileName: req.body.profileName});
 
       if (userExists !== null) {
          return res.json({ userExists: true })
       }
-        bcrypt.hash(req.body.password, 12, (err, hashedPassword) => {
-
+        
+      bcrypt.hash(req.body.password, 12, (err, hashedPassword) => {
         const user = new User({
           profileName: req.body.profileName,
           password: hashedPassword,
@@ -87,6 +96,7 @@ const register_post = [
           themePref: req.body.themePref,
           layoutPref: req.body.layoutPref,
           blogTitle: req.body.blogTitle,
+          profilePic: imgFilename
         })
 
         user.save(err => {
