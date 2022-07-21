@@ -5,9 +5,19 @@ import { body, validationResult } from "express-validator";
 import { validateImage } from '../img/multer.js'
 
 const article_create_post = [
-  body('title').trim().isLength({max: 150}).escape().withMessage('The title of your article cannot exceed 150 characters.'),
-  body('imgDesc').trim().isLength({max: 150}).escape().withMessage('Your image description cannot exceed 150 characters.'),
-  
+  // Validate fields
+  body('title', 'The title of your article cannot exceed 150 characters.')
+    .trim()
+    .isLength({ max: 150 })
+    .escape(),
+  body('content', 'Your article must be at least 5 characters.')
+    .trim()
+    .isLength({ min: 5 })
+    .escape(),
+  body('imgDesc', 'Your image description cannot exceed 150 characters.')
+    .trim()
+    .isLength({max: 150})
+    .escape(),
   (req, res, next) => {
     const errors = validationResult(req)
     
