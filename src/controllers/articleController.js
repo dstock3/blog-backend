@@ -40,13 +40,9 @@ const article_create_post = [
           User.findByIdAndUpdate(req.body.userId)
             .populate('articles')
             .exec(function(err, thisUser) {
-
               thisUser.articles.push(article)
-              console.log(thisUser)
-
               thisUser.save(err => {
                 if (err) { return next(err) }
-
                 res.json({ 
                   message: 'article posted' 
                 });
@@ -65,13 +61,9 @@ const article_create_post = [
           User.findByIdAndUpdate(req.body.userId)
             .populate('articles')
             .exec(function(err, thisUser) {
-
               thisUser.articles.push(article)
-              console.log(thisUser)
-
               thisUser.save(err => {
                 if (err) { return next(err) }
-
                 res.json({ 
                   message: 'article posted' 
                 });
@@ -123,5 +115,17 @@ const article_delete_post = function(req, res, next) {
       });
   };
 }
+
+const article_create_comment = function(req, res, next) {
+  res.send("post received!")
+}
+
+const article_edit_comment = function(req, res, next) {
+  res.send("edit request received!")
+}
+
+const article_delete_comment = function(req, res, next) {
+  res.send("delete request received!")
+}
   
-export default { article_create_post, article_update_put, article_delete_post }
+export default { article_create_post, article_update_put, article_delete_post, article_create_comment, article_edit_comment, article_delete_comment }

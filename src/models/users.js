@@ -2,8 +2,7 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema(
-  {
+const UserSchema = new Schema({
     profileName: {type: String, required: true, minLength: 4, maxLength: 25},
     password: {type: String, required: true, minLength: 5 },
     admin: {type: Boolean, default: false},
@@ -14,14 +13,13 @@ const UserSchema = new Schema(
     blogTitle: {type: String, required: true, maxLength: 100},
     dateJoined: {type: Date},
     articles: [{type: Schema.Types.ObjectId, ref: 'Articles'}]
-  }
-);
+});
 
 // Virtual for User's URL
 UserSchema
-.virtual('url')
-.get(function () {
-  return '/' + this.username;
+  .virtual('url')
+  .get(function () {
+    return '/' + this.username;
 });
 
 //Export model
