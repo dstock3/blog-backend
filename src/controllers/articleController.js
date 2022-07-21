@@ -5,57 +5,51 @@ import { body, validationResult } from "express-validator";
 import { validateImage } from '../img/multer.js'
 
 const article_create_post = [
-  /*
   body('title').trim().isLength({max: 150}).escape().withMessage('The title of your article cannot exceed 150 characters.'),
   body('imgDesc').trim().isLength({max: 150}).escape().withMessage('Your image description cannot exceed 150 characters.'),
-  body('content').isEmpty().trim().escape().withMessage('Please include the content of your article.'),
-  */
+  
   (req, res, next) => {
-    //const errors = validationResult(req)
-    /*
+    const errors = validationResult(req)
+    
     if (!errors.isEmpty()) {
       return res.json({ errors: errors.errors })
     }
-    */
-    if (err) { 
-      res.json({ message: "login validation check failed" })
-    } else {
-      try {
-        if (img) {
-          const article = new Article({
-            title: req.body.title,
-            img: req.body.img,
-            imgDesc: req.body.imgDesc,
-            content: req.body.content,
-            blogTitle: req.body.blogTitle
-          });
+    
+    try {
+      if (req.body.img) {
+        const article = new Article({
+          title: req.body.title,
+          img: req.body.img,
+          imgDesc: req.body.imgDesc,
+          content: req.body.content
+        });
 
-          article.save(err => {
-            if (err) { return next(err) }
-            res.json({ 
-              message: 'article posted', 
-              user: req.user  
-            })
+        article.save(err => {
+          if (err) { return next(err) }
+          res.json({ 
+            message: 'article posted',
+            article: article,
+            user: req.user  
           })
+        })
 
-        } else {
-          const article = new Article({
-            title: req.body.title,
-            content: req.body.content,
-            blogTitle: req.body.blogTitle
-          });
+      } else {
+        const article = new Article({
+          title: req.body.title,
+          content: req.body.content
+        });
 
-          article.save(err => {
-            if (err) { return next(err) }
-            res.json({ 
-              message: 'article posted', 
-              user: req.user  
-            })
+        article.save(err => {
+          if (err) { return next(err) }
+          res.json({ 
+            message: 'article posted',
+            article: article,
+            user: req.user  
           })
-        }
-      } catch(err) { 
-        return next(err) 
+        })
       }
+    } catch(err) { 
+      return next(err) 
     }
   }
 ];
