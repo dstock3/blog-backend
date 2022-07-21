@@ -117,7 +117,7 @@ const article_delete_post = function(req, res, next) {
   };
 }
 
-const article_create_comment = [
+const comment_create_post = [
   // Validate fields
   body('content', 'Your comment must be at least 5 characters.')
     .trim()
@@ -153,12 +153,12 @@ const article_create_comment = [
     }
   }
 ]
-const article_edit_comment = function(req, res, next) {
+const comment_update_put = function(req, res, next) {
   res.send("edit request received!")
 }
 
-const article_delete_comment = function(req, res, next) {
+const comment_delete_post = function(req, res, next) {
   res.send("delete request received!")
 }
   
-export default { article_create_post, article_update_put, article_delete_post, article_create_comment, article_edit_comment, article_delete_comment }
+export default { article_create_post, article_update_put, article_delete_post, comment_create_post, comment_update_put, comment_delete_post }

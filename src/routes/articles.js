@@ -18,12 +18,12 @@ router.put('/:articleId', [verify, upload.single('image')], article_controller.a
 router.delete('/:articleId/', verify, article_controller.article_delete_post);
 
 /* Comment on specific article */
-router.post('/:articleId/', verify, article_controller.article_create_comment);
+router.post('/:articleId/', verify, article_controller.comment_create_post);
 
 /* Edit a comment */
-router.put('/:articleId/:commentId', verify, article_controller.article_edit_comment);
+router.put('/:articleId/:commentId', verify, article_controller.comment_update_put);
 
 /* Delete a comment */
-router.delete('/:articleId/:commentId', verify, article_controller.article_delete_comment);
+router.delete('/:articleId/:commentId', verify, article_controller.comment_delete_post);
 
 export default router;
