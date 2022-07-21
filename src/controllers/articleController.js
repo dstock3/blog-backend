@@ -26,13 +26,23 @@ const article_create_post = [
 
         article.save(err => {
           if (err) { return next(err) }
-          res.json({ 
-            message: 'article posted',
-            article: article,
-            user: req.user  
-          })
-        })
 
+          User.findByIdAndUpdate(req.body.userId)
+            .populate('articles')
+            .exec(function(err, thisUser) {
+
+              thisUser.articles.push(article)
+              console.log(thisUser)
+
+              thisUser.save(err => {
+                if (err) { return next(err) }
+
+                res.json({ 
+                  message: 'article posted' 
+                });
+              })
+            });
+        });
       } else {
         const article = new Article({
           title: req.body.title,
@@ -41,12 +51,23 @@ const article_create_post = [
 
         article.save(err => {
           if (err) { return next(err) }
-          res.json({ 
-            message: 'article posted',
-            article: article,
-            user: req.user  
-          })
-        })
+
+          User.findByIdAndUpdate(req.body.userId)
+            .populate('articles')
+            .exec(function(err, thisUser) {
+
+              thisUser.articles.push(article)
+              console.log(thisUser)
+
+              thisUser.save(err => {
+                if (err) { return next(err) }
+
+                res.json({ 
+                  message: 'article posted' 
+                });
+              })
+            });
+        });
       }
     } catch(err) { 
       return next(err) 
