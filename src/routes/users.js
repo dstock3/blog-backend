@@ -21,7 +21,7 @@ router.post('/logout', user_controller.logout_post)
 router.post('/register', upload.single('image'), user_controller.register_post);
 
 /* Update user profile */
-router.put('/:username/update', verify, upload.single('image'), user_controller.user_update);
+router.put('/:username/update', [verify, upload.single('image')], user_controller.user_update);
 
 /* Delete user profile */
 router.delete('/:username/delete', verify, user_controller.user_delete);

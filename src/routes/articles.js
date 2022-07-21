@@ -9,10 +9,10 @@ const router = Router();
 // Articles
 
 /* Compose article */
-router.post('/compose', verify, upload.single('image'), article_controller.article_create_post);
+router.post('/compose', [verify, upload.single('image')], article_controller.article_create_post);
 
 /* Update specific article */
-router.put('/:articleId', verify, upload.single('image'), article_controller.article_update_put);
+router.put('/:articleId', [verify, upload.single('image')], article_controller.article_update_put);
 
 /* Delete specific article */
 router.delete('/:articleId', verify, article_controller.article_delete_post);

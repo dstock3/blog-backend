@@ -76,7 +76,7 @@ const register_post = [
       imgFilename = req.file.originalname
     }
 
-    if (!errors.isEmpty() || (imgMessages.length > 0)) {
+    if (!errors.isEmpty() || (imgMessages)) {
       return res.json({ errors: errors.errors, imgErrors: imgMessages })
     }
     
