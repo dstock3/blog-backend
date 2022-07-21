@@ -8,7 +8,7 @@ const ArticleSchema = new Schema({
     imgDesc: {type: String, maxLength: 150},
     date: {type: Date},
     content: {type: String, required: true},
-    comments: {type: Array}
+    comments: [{type: Schema.Types.ObjectId, ref: 'Comments'}]
 });
 
 // Virtual for User's URL

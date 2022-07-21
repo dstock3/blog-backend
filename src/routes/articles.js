@@ -18,7 +18,7 @@ router.put('/:articleId', [verify, upload.single('image')], article_controller.a
 router.delete('/:articleId/', verify, article_controller.article_delete_post);
 
 /* Comment on specific article */
-router.post('/:articleId/:commentId', verify, article_controller.article_create_comment);
+router.post('/:articleId/', verify, article_controller.article_create_comment);
 
 /* Edit a comment */
 router.put('/:articleId/:commentId', verify, article_controller.article_edit_comment);

@@ -1,5 +1,6 @@
 import User from '../models/users.js';
 import Article from '../models/articles.js';
+import Comment from '../models/comments.js';
 import async from 'async';
 import { body, validationResult } from "express-validator";
 import { validateImage } from '../img/multer.js'
@@ -116,10 +117,42 @@ const article_delete_post = function(req, res, next) {
   };
 }
 
-const article_create_comment = function(req, res, next) {
-  res.send("post received!")
-}
+const article_create_comment = [
+  // Validate fields
+  body('content', 'Your comment must be at least 5 characters.')
+    .trim()
+    .isLength({ min: 5 })
+    .escape(),
+  (req, res, next) => {
+    const errors = validationResult(req)
 
+    if (!errors.isEmpty()) {
+      return res.json({ errors: errors.errors })
+    }
+
+    try {
+      const comment = new Comment({
+        profileName: req.body.userId,
+        content: req.body.content
+      });
+
+      comment.save(err => {
+        Article.findByIdAndUpdate(req.body.articleId)
+          .populate('comments')
+          .exec(function(err, thisArticle) {
+            thisArticle.comments.push(comment)
+            thisArticle.save(err => {
+              if (err) { return next(err) }
+              res.json({ message: 'comment posted' })
+            })
+            
+          })
+      })
+    } catch(err) {
+      return next(err) 
+    }
+  }
+]
 const article_edit_comment = function(req, res, next) {
   res.send("edit request received!")
 }
