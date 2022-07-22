@@ -141,7 +141,7 @@ const comment_create_post = [
 
     try {
       const comment = new Comment({
-        profileName: req.body.userId,
+        profileName: req.body.profileName,
         content: req.body.content
       });
 

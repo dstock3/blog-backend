@@ -46,16 +46,10 @@ const logout_post = async function (req, res) {
 
 const user_read_get = async function(req, res) {
   User.find({ 'profileName': req.params.username }, 'profileName profileDesc profilePic blogTitle dateJoined articles')
-    .populate('profileName')
-    .populate('profileDesc')
-    .populate('profilePic')
-    .populate('blogTitle')
-    .populate('dateJoined')
     .populate('articles')
     .exec(function(err, thisUser) {
       if (err) { return next(err) }
-      Comment.find({ 'profileName': thisUser._id }, 'profileName content')
-        .populate('profileName')
+      Comment.find({ 'profileName': thisUser[0]._id.toString() }, 'profileName content')
         .populate('content')
         .exec(function(err, theseComments) {
           if (err) { return next(err) }
