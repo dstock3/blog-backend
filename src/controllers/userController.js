@@ -1,4 +1,5 @@
 import User from '../models/users.js'
+import Comment from '../models/comments.js';
 import async from 'async';
 import { body, validationResult } from "express-validator";
 import bcrypt from 'bcryptjs';
@@ -43,8 +44,24 @@ const logout_post = async function (req, res) {
 
 }
 
-const user_read_get = async function(req, res, next) {
-
+const user_read_get = async function(req, res) {
+  User.find({ 'profileName': req.params.username }, 'profileName profileDesc profilePic blogTitle dateJoined articles')
+    .populate('profileName')
+    .populate('profileDesc')
+    .populate('profilePic')
+    .populate('blogTitle')
+    .populate('dateJoined')
+    .populate('articles')
+    .exec(function(err, thisUser) {
+      if (err) { return next(err) }
+      Comment.find({ 'profileName': thisUser._id }, 'profileName content')
+        .populate('profileName')
+        .populate('content')
+        .exec(function(err, theseComments) {
+          if (err) { return next(err) }
+          res.json({ user: thisUser, comments: theseComments })
+        });
+    });
 }
 
 const user_create_post = [
