@@ -7,7 +7,12 @@ import { validateImage } from '../img/multer.js'
 
 
 const article_read_get = function(req, res) {
-  console.log("get article")
+  Article.findById(req.params.articleId, 'title img imgDesc date content comments')
+    .populate('comments')
+    .exec(function(err, thisArticle) {
+      if (err) { return next(err) }
+      res.json({ article: thisArticle })
+    })
 }
 
 const article_create_post = [
@@ -122,7 +127,7 @@ const article_delete_post = function(req, res, next) {
   };
 }
 
-const comment_read_get = function(req, res, next) {
+const comment_read_get = function(req, res) {
   console.log("get comment")
 }
 
