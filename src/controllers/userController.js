@@ -43,7 +43,11 @@ const logout_post = async function (req, res) {
 
 }
 
-const register_post = [
+const user_read_get = async function(req, res, next) {
+
+}
+
+const user_create_post = [
   // Validate fields
   body('profileName', 'Your username must be at least four characters long.')
     .trim()
@@ -112,7 +116,7 @@ const register_post = [
   }
 ];
 
-const user_update = [
+const user_update_put = [
   // Validate fields
   body('profileName', 'Your username must be at least four characters long.')
     .trim()
@@ -161,8 +165,6 @@ const user_update = [
     }
 ]
 
-
-
 const user_delete = function(req, res, next) {
   if (err) {
     res.json({ message: "login validation check failed" })
@@ -177,4 +179,12 @@ const user_delete = function(req, res, next) {
   };
 }
 
-export default { index, login_post, logout_post, register_post, user_update, user_delete }
+export default { 
+  index, 
+  login_post, 
+  logout_post, 
+  user_read_get, 
+  user_create_post, 
+  user_update_put, 
+  user_delete 
+}

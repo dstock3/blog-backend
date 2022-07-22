@@ -17,11 +17,14 @@ router.post('/logout', user_controller.logout_post)
 
 // Users
 
+/* Get user profile */ 
+router.get('/:username/', user_controller.user_read_get);
+
 /* Create user profile */
-router.post('/register', upload.single('image'), user_controller.register_post);
+router.post('/register', upload.single('image'), user_controller.user_create_post);
 
 /* Update user profile */
-router.put('/:username/update', [verify, upload.single('image')], user_controller.user_update);
+router.put('/:username/update', [verify, upload.single('image')], user_controller.user_update_put);
 
 /* Delete user profile */
 router.delete('/:username/delete', verify, user_controller.user_delete);

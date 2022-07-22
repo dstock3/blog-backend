@@ -5,6 +5,11 @@ import async from 'async';
 import { body, validationResult } from "express-validator";
 import { validateImage } from '../img/multer.js'
 
+
+const article_read_get = function(req, res) {
+  console.log("get article")
+}
+
 const article_create_post = [
   // Validate fields
   body('title', 'The title of your article cannot exceed 150 characters.')
@@ -47,7 +52,7 @@ const article_create_post = [
                 res.json({ 
                   message: 'article posted' 
                 });
-              })
+              });
             });
         });
       } else {
@@ -117,6 +122,10 @@ const article_delete_post = function(req, res, next) {
   };
 }
 
+const comment_read_get = function(req, res, next) {
+  console.log("get comment")
+}
+
 const comment_create_post = [
   // Validate fields
   body('content', 'Your comment must be at least 5 characters.')
@@ -140,19 +149,20 @@ const comment_create_post = [
         Article.findByIdAndUpdate(req.body.articleId)
           .populate('comments')
           .exec(function(err, thisArticle) {
+            if (err) { return next(err) }
             thisArticle.comments.push(comment)
             thisArticle.save(err => {
               if (err) { return next(err) }
               res.json({ message: 'comment posted' })
-            })
-            
-          })
+            });
+        });
       })
     } catch(err) {
       return next(err) 
     }
   }
 ]
+
 const comment_update_put = function(req, res, next) {
   res.send("edit request received!")
 }
@@ -161,4 +171,13 @@ const comment_delete_post = function(req, res, next) {
   res.send("delete request received!")
 }
   
-export default { article_create_post, article_update_put, article_delete_post, comment_create_post, comment_update_put, comment_delete_post }
+export default {
+  article_read_get, 
+  article_create_post, 
+  article_update_put, 
+  article_delete_post,
+  comment_read_get,  
+  comment_create_post,
+  comment_update_put, 
+  comment_delete_post
+}

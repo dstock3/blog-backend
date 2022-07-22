@@ -8,6 +8,9 @@ const router = Router();
 
 // Articles
 
+/* Get specific article */
+router.get('/:articleId', article_controller.article_read_get);
+
 /* Compose article */
 router.post('/compose', [verify, upload.single('image')], article_controller.article_create_post);
 
@@ -16,6 +19,9 @@ router.put('/:articleId', [verify, upload.single('image')], article_controller.a
 
 /* Delete specific article */
 router.delete('/:articleId/', verify, article_controller.article_delete_post);
+
+/* Get specific comment */
+router.get('/:articleId/:commentId', article_controller.comment_read_get);
 
 /* Comment on specific article */
 router.post('/:articleId/', verify, article_controller.comment_create_post);
