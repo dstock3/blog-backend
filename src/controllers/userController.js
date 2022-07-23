@@ -49,12 +49,14 @@ const user_read_get = async function(req, res) {
     .populate('articles')
     .exec(function(err, thisUser) {
       if (err) { return next(err) }
-      Comment.find({ 'profileName': thisUser[0]._id.toString() }, 'profileName content')
+      if(thisUser._id) {
+        Comment.find({ 'profileName': thisUser[0]._id.toString() }, 'profileName content')
         .populate('content')
         .exec(function(err, theseComments) {
           if (err) { return next(err) }
           res.json({ user: thisUser, comments: theseComments })
         });
+      }
     });
 }
 
