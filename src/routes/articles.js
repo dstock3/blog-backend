@@ -20,9 +20,6 @@ router.put('/:articleId', [verify, upload.single('image')], article_controller.a
 /* Delete specific article */
 router.delete('/:articleId/', verify, article_controller.article_delete_post);
 
-/* Get specific comment */
-router.get('/:articleId/:commentId', article_controller.comment_read_get);
-
 /* Comment on specific article */
 router.post('/:articleId/', verify, article_controller.comment_create_post);
 

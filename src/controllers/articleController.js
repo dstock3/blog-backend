@@ -5,7 +5,6 @@ import async from 'async';
 import { body, validationResult } from "express-validator";
 import { validateImage } from '../img/multer.js'
 
-
 const article_read_get = function(req, res) {
   Article.findById(req.params.articleId, 'title img imgDesc date content comments')
     .populate('comments')
@@ -127,10 +126,6 @@ const article_delete_post = function(req, res, next) {
   };
 }
 
-const comment_read_get = function(req, res) {
-  console.log("get comment")
-}
-
 const comment_create_post = [
   // Validate fields
   body('content', 'Your comment must be at least 5 characters.')
@@ -180,8 +175,7 @@ export default {
   article_read_get, 
   article_create_post, 
   article_update_put, 
-  article_delete_post,
-  comment_read_get,  
+  article_delete_post,  
   comment_create_post,
   comment_update_put, 
   comment_delete_post

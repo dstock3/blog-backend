@@ -29,4 +29,7 @@ router.put('/:username/update', [verify, upload.single('image')], user_controlle
 /* Delete user profile */
 router.delete('/:username/delete', verify, user_controller.user_delete);
 
+/* Get comments for a specific user */
+router.get('/:username/comments', user_controller.comment_read_get);
+
 export default router;

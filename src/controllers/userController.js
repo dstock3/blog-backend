@@ -190,6 +190,18 @@ const user_delete = function(req, res, next) {
   };
 }
 
+const comment_read_get = function(req, res) {
+  User.find({ 'profileName': req.params.username })
+    .exec(function(err, thisUser) {
+      if (err) { return next(err) }
+      Comment.find({ 'profileName': thisUser[0]._id.toString() })
+        .exec(function(err, theseComments) {
+          if (err) { return next(err) }
+          res.json({ comments: theseComments })
+        });
+    });
+}
+
 export default { 
   index, 
   login_post, 
@@ -197,5 +209,6 @@ export default {
   user_read_get, 
   user_create_post, 
   user_update_put, 
-  user_delete 
+  user_delete,
+  comment_read_get 
 }
