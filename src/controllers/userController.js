@@ -200,7 +200,7 @@ const comment_read_get = function(req, res) {
   User.find({ 'profileName': req.params.username })
     .exec(function(err, thisUser) {
       if (err) { return next(err) }
-      Comment.find({ 'profileName': thisUser[0]._id.toString() })
+      Comment.find({ 'userId': thisUser[0]._id.toString() })
         .exec(function(err, theseComments) {
           if (err) { return next(err) }
           res.json({ comments: theseComments })

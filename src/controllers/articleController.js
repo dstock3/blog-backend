@@ -8,6 +8,7 @@ import { parseJwt } from '../auth/parseToken.js'
 
 const article_read_get = function(req, res) {
   Article.findById(req.params.articleId, 'title img imgDesc date content comments')
+    .populate('comments')
     .exec(function(err, thisArticle) {
       if (err) { return next(err) }
       res.json({ article: thisArticle })
@@ -148,11 +149,12 @@ const comment_create_post = [
     try {
       const comment = new Comment({
         profileName: req.body.profileName,
+        userId: req.body.userId,
         content: req.body.content
       });
 
       comment.save(err => {
-        Article.findByIdAndUpdate(req.body.articleId)
+        Article.findByIdAndUpdate(req.params.articleId)
           .populate('comments')
           .exec(function(err, thisArticle) {
             if (err) { return next(err) }
