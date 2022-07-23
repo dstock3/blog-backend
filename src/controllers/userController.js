@@ -177,13 +177,14 @@ const user_update_put = [
 ]
 
 const user_delete = function(req, res, next) {
-    User.findByIdAndDelete(req.body.userId, function(err, thisUser) {
-      console.log(thisUser)
-      if (err) { return next(err) }
-      res.json({
-        message: `user deleted ${thisUser.profileName}`
-      })
-    });
+  //need to refine controller to prevent other unauthorized users from deleting accounts
+  User.findByIdAndDelete(req.body.userId, function(err, thisUser) {
+    console.log(thisUser)
+    if (err) { return next(err) }
+    res.json({
+      message: `user deleted ${thisUser.profileName}`
+    })
+  });
 }
 
 const comment_read_get = function(req, res) {
