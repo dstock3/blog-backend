@@ -177,17 +177,13 @@ const user_update_put = [
 ]
 
 const user_delete = function(req, res, next) {
-  if (err) {
-    res.json({ message: "login validation check failed" })
-  } else {
-    User.findByIdAndDelete(req.body.userId, function(err, docs){
+    User.findByIdAndDelete(req.body.userId, function(err, thisUser) {
+      console.log(thisUser)
       if (err) { return next(err) }
       res.json({
-        message: "user deleted",
-        user: req.user
+        message: `user deleted ${thisUser.profileName}`
       })
     });
-  };
 }
 
 const comment_read_get = function(req, res) {
