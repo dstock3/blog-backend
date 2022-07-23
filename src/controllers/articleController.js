@@ -4,6 +4,7 @@ import Comment from '../models/comments.js';
 import async from 'async';
 import { body, validationResult } from "express-validator";
 import { validateImage } from '../img/multer.js'
+import { parseJwt } from '../auth/parseToken.js'
 
 const article_read_get = function(req, res) {
   Article.findById(req.params.articleId, 'title img imgDesc date content comments')
@@ -104,27 +105,23 @@ const article_update_put = async function(req, res, next) {
 };
   
 const article_delete_post = function(req, res, next) {
-  if (err) { 
-    res.json({ message: "login validation check failed" })
-  } else {
-    const articleId = req.body.articleId
-
+  const token = req.header('login-token');
+  const parsedToken = parseJwt(token)
+  if (parsedToken._id === req.body.userId) {
     User.findOneAndUpdate(
-      {_id: req.body.userId },
-      {$pull: { articles: req.body.articleId }
-      }, function(err, id) {
+      {_id: req.body.articleId },
+      {$pull: { articles: req.body.articleId }}, 
+      
+      function(err, thisUser) {
         if (err) { return next(err) }
-        
-        Article.findByIdAndDelete(articleId, function(err, docs){
+        Article.findByIdAndDelete(req.body.articleId , function(err, thisArticle) {
           if (err) { return next(err) }
-          res.json({ 
-            message: "article deleted", 
-            user: req.user  
-          });
+          res.json({ message: "article deleted" });
         });
-      });
+    });
   };
-}
+};
+
 
 const comment_create_post = [
   // Validate fields
