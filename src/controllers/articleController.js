@@ -8,7 +8,6 @@ import { parseJwt } from '../auth/parseToken.js'
 
 const article_read_get = function(req, res) {
   Article.findById(req.params.articleId, 'title img imgDesc date content comments')
-    .populate('comments')
     .exec(function(err, thisArticle) {
       if (err) { return next(err) }
       res.json({ article: thisArticle })
@@ -104,7 +103,7 @@ const article_update_put = async function(req, res, next) {
   }
 };
   
-const article_delete_post = function(req, res, next) {
+const article_delete = function(req, res, next) {
   const token = req.header('login-token');
   const parsedToken = parseJwt(token)
   if (parsedToken._id === req.body.userId) {
@@ -122,6 +121,16 @@ const article_delete_post = function(req, res, next) {
   };
 };
 
+const comment_read_post = function(req, res) {
+  Article.findById(req.params.articleId, 'comments')
+    .populate('comments')
+    .exec(function(err, thisArticle) {
+      console.log(thisArticle)
+      if (thisArticle.comments) {
+        res.json({ comments: thisArticle.comments })
+      }
+    })
+}
 
 const comment_create_post = [
   // Validate fields
@@ -164,7 +173,7 @@ const comment_update_put = function(req, res, next) {
   res.send("edit request received!")
 }
 
-const comment_delete_post = function(req, res, next) {
+const comment_delete = function(req, res, next) {
   res.send("delete request received!")
 }
   
@@ -172,8 +181,9 @@ export default {
   article_read_get, 
   article_create_post, 
   article_update_put, 
-  article_delete_post,  
+  article_delete,
+  comment_read_post,  
   comment_create_post,
   comment_update_put, 
-  comment_delete_post
+  comment_delete
 }

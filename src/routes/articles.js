@@ -18,7 +18,10 @@ router.post('/compose', [verify, upload.single('image')], article_controller.art
 router.put('/:articleId', [verify, upload.single('image')], article_controller.article_update_put);
 
 /* Delete specific article */
-router.delete('/:articleId/', verify, article_controller.article_delete_post);
+router.delete('/:articleId/', verify, article_controller.article_delete);
+
+/* Get comments for a specific article */
+router.get('/:articleId/comments', article_controller.comment_read_post)
 
 /* Comment on specific article */
 router.post('/:articleId/', verify, article_controller.comment_create_post);
@@ -27,6 +30,6 @@ router.post('/:articleId/', verify, article_controller.comment_create_post);
 router.put('/:articleId/:commentId', verify, article_controller.comment_update_put);
 
 /* Delete a comment */
-router.delete('/:articleId/:commentId', verify, article_controller.comment_delete_post);
+router.delete('/:articleId/:commentId', verify, article_controller.comment_delete );
 
 export default router;
