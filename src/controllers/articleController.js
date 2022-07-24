@@ -176,7 +176,19 @@ const comment_update_put = function(req, res, next) {
 }
 
 const comment_delete = function(req, res, next) {
-  res.send("delete request received!")
+  const token = req.header('login-token');
+  const parsedToken = parseJwt(token);
+  if (parsedToken._id === req.body.userId) {
+    Article.findOneAndUpdate(
+      {_id: req.params.articleId },
+      {$pull: { comments: req.params.commentId }}, 
+      function(err, thisArticle) {
+        Comment.findByIdAndDelete(req.params.commentId , function(err, thisComment) {
+          if (err) { return next(err) }
+          res.json({ message: "comment deleted" })
+        });
+      });
+  };
 }
   
 export default {
