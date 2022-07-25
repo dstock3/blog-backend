@@ -106,20 +106,29 @@ const article_update_put = async function(req, res, next) {
   
 const article_delete = function(req, res, next) {
   const token = req.header('login-token');
-  const parsedToken = parseJwt(token)
-  if (parsedToken._id === req.body.userId) {
-    User.findOneAndUpdate(
-      {_id: req.body.articleId },
-      {$pull: { articles: req.body.articleId }}, 
-      
-      function(err, thisUser) {
-        if (err) { return next(err) }
-        Article.findByIdAndDelete(req.body.articleId , function(err, thisArticle) {
+  const parsedToken = parseJwt(token);
+  let authorized = false;
+
+  User.findOneAndUpdate(
+    {_id: parsedToken._id },
+    {$pull: { articles: req.params.articleId }}, 
+    
+    function(err, thisUser) {
+      if (err) { return next(err) }
+      for (let i = 0; i < thisUser.articles.length; i++) {
+        let thisArticleId = thisUser.articles[i]._id.toString()
+        if (thisArticleId === req.params.articleId) {
+          authorized = true
+        }
+      }
+      if (authorized) {
+        Article.findByIdAndDelete(req.params.articleId , function(err, thisArticle) {
           if (err) { return next(err) }
           res.json({ message: "article deleted" });
         });
-    });
-  };
+      } else { res.json({ message: "unauthorized" })}
+
+  });
 };
 
 const comment_read_post = function(req, res) {
