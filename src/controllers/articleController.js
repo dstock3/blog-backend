@@ -181,63 +181,61 @@ const comment_delete = function(req, res, next) {
   let articleAuthor
   let authorized = false
 
-  if (req.body.userId === parsedToken._id) {
-    async.parallel({
-      comment: function(cb) {
-        Comment.findById(req.params.commentId, 'profileName userId')
-          .populate('userId')
-          .exec(cb)
-      },
-      users: function(cb) {
-        User.find()
-        .populate('articles')
+  async.parallel({
+    comment: function(cb) {
+      Comment.findById(req.params.commentId, 'profileName userId')
+        .populate('userId')
         .exec(cb)
-      }
-    }, function(err, data) {
-      if (err) { return next(err) }
+    },
+    users: function(cb) {
+      User.find()
+      .populate('articles')
+      .exec(cb)
+    }
+  }, function(err, data) {
+    if (err) { return next(err) }
 
-      for (let prop in data.users) {
-        let user = data.users[prop]
-        for (let i = 0; i < user.articles.length; i++) {
-          let article = user.articles[i]
+    for (let prop in data.users) {
+      let user = data.users[prop]
+      for (let i = 0; i < user.articles.length; i++) {
+        let article = user.articles[i]
 
-          if (article._id.toString() === req.params.articleId) {
-            articleAuthor = user
-          };
+        if (article._id.toString() === req.params.articleId) {
+          articleAuthor = user
         };
       };
+    };
 
-      if (articleAuthor) {
-        if (parsedToken._id === articleAuthor._id.toString()) {
-          authorized = true;
-        };
+    if (articleAuthor) {
+      if (parsedToken._id === articleAuthor._id.toString()) {
+        authorized = true;
       };
+    };
 
-      if (data.comment) {
-        if (data.comment.userId._id.toString()=== req.body.userId) {
-          authorized = true;
-        };
-      }
+    if (data.comment) {
+      if (parsedToken._id === data.comment.userId._id.toString()) {
+        authorized = true;
+      };
+    }
 
-      if (authorized) {
-        Article.findOneAndUpdate(
-          {_id: req.params.articleId },
-          {$pull: { comments: req.params.commentId }}, 
-          function(err, thisArticle) {
-            Comment.findByIdAndDelete(req.params.commentId , function(err, thisComment) {
-              if (err) { return next(err) }
-              res.json({ message: "comment deleted" })
-            });
+    if (authorized) {
+      Article.findOneAndUpdate(
+        {_id: req.params.articleId },
+        {$pull: { comments: req.params.commentId }}, 
+        function(err, thisArticle) {
+          Comment.findByIdAndDelete(req.params.commentId , function(err, thisComment) {
+            if (err) { return next(err) }
+            res.json({ message: "comment deleted" })
           });
+        });
+      } else {
+        if (!authorized) {
+          res.json({ message: "unauthorized" })
         } else {
-          if (!authorized) {
-            res.json({ message: "unauthorized" })
-          } else {
-            res.json({ message: "error" })
-          }
-        };
-    });
-  };
+          res.json({ message: "error" })
+        }
+      };
+  });
 }
 
 export default {
