@@ -89,19 +89,15 @@ const article_create_post = [
 ];
 
 const article_update_put = async function(req, res, next) {
-  if (err) { 
-    res.json({ message: "login validation check failed" })
-  } else {
     const postToUpdate = await Article.findOne({_id: req.body.articleId})
 
     postToUpdate.save(err => {
       if (err) { return next(err) }
       res.json({ 
-        message: "update successful", 
-        user: req.user 
-      })
+        message: "update successful"
+      });
     });
-  }
+
 };
   
 const article_delete = function(req, res, next) {
