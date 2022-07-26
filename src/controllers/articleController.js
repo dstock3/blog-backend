@@ -58,7 +58,7 @@ const article_create_post = [
               thisUser.save(err => {
                 if (err) { return next(err) }
                 res.json({ 
-                  message: 'article posted' 
+                  message: 'article posted', articleId: article._id
                 });
               });
             });
@@ -79,7 +79,7 @@ const article_create_post = [
               thisUser.save(err => {
                 if (err) { return next(err) }
                 res.json({ 
-                  message: 'article posted' 
+                  message: 'article posted', articleId: article._id 
                 });
               })
             });
@@ -147,7 +147,7 @@ const article_update_put = [
             };
 
             if (authorized) { 
-              res.json({ message: "article updated!" });
+              res.json({ message: "article updated!", articleId: req.params.articleId });
             } else { 
               res.json({ message: "unauthorized" }) 
             };
