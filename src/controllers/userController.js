@@ -159,7 +159,7 @@ const user_update_put = [
         return res.json({ errors: errors.errors })
       }
 
-      const updatedUser = new User({
+      const updatedUser = {
         profileName: req.body.profileName,
         password: hashedPassword,
         admin: false,
@@ -167,14 +167,13 @@ const user_update_put = [
         themePref: req.body.themePref,
         layoutPref: req.body.layoutPref,
         blogTitle: req.body.blogTitle,
-      })
+      }
 
       User.findByIdAndUpdate(req.body.userId, updatedUser, {}, function (err, thisUser) {
         if (err) { return next(err) }
         res.json({ 
-          message: "update successful", 
-          user: req.user 
-        })
+          message: "update successful"
+        });
       });
     }
 ]

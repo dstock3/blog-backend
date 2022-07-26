@@ -130,13 +130,28 @@ const article_update_put = [
           content: req.body.content,
         };
       }
-
-      Article.findByIdAndUpdate(req.params.articleId, updatedArticle, {}, function (err, thisArticle) {
+      
+      Article.findByIdAndUpdate(req.params.articleId, updatedArticle, {}, function(err, thisArticle) {
         if (err) { return next(err); }
 
-        res.json({ message: "article updated!" });
+        User.findById(parsedToken._id)
+          .exec(function(err, thisUser) {
+            if (err) { return next(err) }
+
+            for (let i = 0; i < thisUser.articles.length; i++) {
+              if (thisUser.articles[i]._id.toString() === req.params.articleId) {
+                authorized = true
+              };
+            };
+
+            if (authorized) { 
+              res.json({ message: "article updated!" });
+            } else { 
+              res.json({ message: "unauthorized" }) 
+            };
+          });
       });
-    }
+    } 
   }
 ]
 
@@ -158,7 +173,7 @@ const article_delete = function(req, res, next) {
         }
       }
       if (authorized) {
-        Article.findByIdAndDelete(req.params.articleId , function(err, thisArticle) {
+        Article.findByIdAndDelete(req.params.articleId, function(err, thisArticle) {
           if (err) { return next(err) }
           res.json({ message: "article deleted" });
         });
