@@ -180,7 +180,6 @@ const article_delete = function(req, res, next) {
           res.json({ message: "article deleted" });
         });
       } else { res.json({ message: "unauthorized" })}
-
   });
 };
 
@@ -232,9 +231,36 @@ const comment_create_post = [
   }
 ]
 
-const comment_update_put = function(req, res, next) {
-  res.send("edit request received!")
-}
+const comment_update_put = [
+    // Validate fields
+    body('content', 'Your comment must be at least 5 characters.')
+    .trim()
+    .isLength({ min: 5 })
+    .escape(),
+  (req, res, next) => {
+    const errors = validationResult(req)
+
+    const token = req.header('login-token');
+    const parsedToken = parseJwt(token);
+  
+    let authorized = false
+
+    let newComment = {
+      profileName: req.body.profileName,
+      userId: parsedToken._id,
+      content: req.body.content
+    }
+
+    Comment.findByIdAndUpdate(req.params.commentId, newComment, function(err, thisComment) {
+      if (thisComment.userId.toString() === parsedToken._id) {
+        thisComment.save(err => {
+          if (err) { return next(err) }
+          res.json({ message: 'comment updated' })
+        });
+      } else { res.json({ message: 'unauthorized' }) }
+    });
+  }
+]
 
 const comment_delete = function(req, res, next) {
   const token = req.header('login-token');
