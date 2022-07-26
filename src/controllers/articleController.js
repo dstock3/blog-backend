@@ -31,6 +31,8 @@ const article_create_post = [
     .isLength({max: 150})
     .escape(),
   (req, res, next) => {
+    const token = req.header('login-token');
+    const parsedToken = parseJwt(token);
     const errors = validationResult(req)
     
     if (!errors.isEmpty()) {
@@ -49,7 +51,7 @@ const article_create_post = [
         article.save(err => {
           if (err) { return next(err) }
 
-          User.findByIdAndUpdate(req.body.userId)
+          User.findByIdAndUpdate(parsedToken._id)
             .populate('articles')
             .exec(function(err, thisUser) {
               thisUser.articles.push(article)
@@ -70,7 +72,7 @@ const article_create_post = [
         article.save(err => {
           if (err) { return next(err) }
 
-          User.findByIdAndUpdate(req.body.userId)
+          User.findByIdAndUpdate(parsedToken._id)
             .populate('articles')
             .exec(function(err, thisUser) {
               thisUser.articles.push(article)
