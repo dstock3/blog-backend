@@ -162,8 +162,7 @@ const user_update_put = [
           blogTitle: req.body.blogTitle,
         }
 
-        User.find({"profileName": req.params.username}, '_id')
-          .populate('_id')
+        User.find({"profileName": req.params.username})
           .exec(function(err, thisUser) {
             if (thisUser[0]._id.toString() === parsedToken._id) {
               User.findByIdAndUpdate(parsedToken._id, updatedUser, {}, function (err, updatedUser) {
