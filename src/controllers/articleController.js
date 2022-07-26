@@ -5,6 +5,7 @@ import async from 'async';
 import { body, validationResult } from "express-validator";
 import { validateImage } from '../img/multer.js'
 import { parseJwt } from '../auth/parseToken.js'
+import comments from '../models/comments.js';
 
 const article_read_get = function(req, res) {
   Article.findById(req.params.articleId, 'title img imgDesc date content comments')
@@ -88,18 +89,57 @@ const article_create_post = [
   }
 ];
 
-const article_update_put = async function(req, res, next) {
-    const postToUpdate = await Article.findOne({_id: req.body.articleId})
+const article_update_put = [
+  // Validate fields
+  body('title', 'The title of your article cannot exceed 150 characters.')
+    .trim()
+    .isLength({ max: 150 })
+    .escape(),
+  body('content', 'Your article must be at least 5 characters.')
+    .trim()
+    .isLength({ min: 5 })
+    .escape(),
+  body('imgDesc', 'Your image description cannot exceed 150 characters.')
+    .trim()
+    .isLength({max: 150})
+    .escape(),
+  async (req, res, next) => {
+    const token = req.header('login-token');
+    const parsedToken = parseJwt(token);
+    let authorized = false;
 
-    postToUpdate.save(err => {
-      if (err) { return next(err) }
-      res.json({ 
-        message: "update successful"
-      });
-    });
-
-};
+    let imgMessages = false
+    if (req.file) { imgMessages = validateImage(req.file) }
+    const errors = validationResult(req)
   
+    if (!errors.isEmpty()) {
+      return res.json({ errors: errors.errors })
+    } else {
+      let updatedArticle
+      
+      if (req.file && !imgMessages) {
+        updatedArticle = {
+          title: req.body.title,
+          img: req.file.originalname,
+          imgDesc: req.body.imgDesc,
+          content: req.body.content,
+        };
+      } else {
+        updatedArticle = {
+          title: req.body.title,
+          content: req.body.content,
+        };
+      }
+
+      Article.findByIdAndUpdate(req.params.articleId, updatedArticle, {}, function (err, thisArticle) {
+        if (err) { return next(err); }
+
+        res.json({ message: "article updated!" });
+      });
+    }
+  }
+]
+
 const article_delete = function(req, res, next) {
   const token = req.header('login-token');
   const parsedToken = parseJwt(token);
