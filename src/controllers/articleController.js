@@ -200,6 +200,9 @@ const comment_create_post = [
     .isLength({ min: 5 })
     .escape(),
   (req, res, next) => {
+    const token = req.header('login-token');
+    const parsedToken = parseJwt(token);
+
     const errors = validationResult(req)
 
     if (!errors.isEmpty()) {
@@ -209,7 +212,7 @@ const comment_create_post = [
     try {
       const comment = new Comment({
         profileName: req.body.profileName,
-        userId: req.body.userId,
+        userId: parsedToken._id,
         content: req.body.content
       });
 
@@ -243,8 +246,6 @@ const comment_update_put = [
     const token = req.header('login-token');
     const parsedToken = parseJwt(token);
   
-    let authorized = false
-
     let newComment = {
       profileName: req.body.profileName,
       userId: parsedToken._id,
