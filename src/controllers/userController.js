@@ -162,14 +162,20 @@ const user_update_put = [
           blogTitle: req.body.blogTitle,
         }
 
-        User.findByIdAndUpdate(parsedToken._id, updatedUser, {}, function (err, thisUser) {
-          if (thisUser.id.toString() === parsedToken._id) {
-            if (err) { return next(err) }
-            res.json({ 
-              message: "update successful"
-            });
-          };
-        });
+        User.find({"profileName": req.params.username}, '_id')
+          .populate('_id')
+          .exec(function(err, thisUser) {
+            if (thisUser[0]._id.toString() === parsedToken._id) {
+              User.findByIdAndUpdate(parsedToken._id, updatedUser, {}, function (err, updatedUser) {
+                if (err) { return next(err) }
+                res.json({ 
+                  message: "update successful"
+                });
+              });
+            } else {
+              res.json({ message: "authentication error" });
+            }
+          });
       });
     }
 ]
