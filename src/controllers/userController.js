@@ -140,39 +140,35 @@ const user_update_put = [
     .trim()
     .isLength({ min: 5 })
     .escape(),
-  body('confirmPassword', 'Your password must be at least five characters long.')
-    .trim()
-    .isLength({ min: 5 })
-    .escape()
-    .custom(
-      async (value, {req }) => {
-        if(value !== req.body.password) {
-            throw new Error('Passwords do not match')
-        }
-        return true;
-    }),
 
     async (req, res, next) => {
+      const token = req.header('login-token');
+      const parsedToken = parseJwt(token);
+
       const errors = validationResult(req)
       
       if (!errors.isEmpty()) {
         return res.json({ errors: errors.errors })
       }
 
-      const updatedUser = {
-        profileName: req.body.profileName,
-        password: hashedPassword,
-        admin: false,
-        profileDesc: req.body.profileDesc,
-        themePref: req.body.themePref,
-        layoutPref: req.body.layoutPref,
-        blogTitle: req.body.blogTitle,
-      }
+      bcrypt.hash(req.body.password, 12, (err, hashedPassword) => {
+        const updatedUser = {
+          profileName: req.body.profileName,
+          password: hashedPassword,
+          admin: false,
+          profileDesc: req.body.profileDesc,
+          themePref: req.body.themePref,
+          layoutPref: req.body.layoutPref,
+          blogTitle: req.body.blogTitle,
+        }
 
-      User.findByIdAndUpdate(req.body.userId, updatedUser, {}, function (err, thisUser) {
-        if (err) { return next(err) }
-        res.json({ 
-          message: "update successful"
+        User.findByIdAndUpdate(parsedToken._id, updatedUser, {}, function (err, thisUser) {
+          if (thisUser.id.toString() === parsedToken._id) {
+            if (err) { return next(err) }
+            res.json({ 
+              message: "update successful"
+            });
+          };
         });
       });
     }
