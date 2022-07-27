@@ -32,4 +32,7 @@ router.put('/:articleId/:commentId', verify, article_controller.comment_update_p
 /* Delete a comment */
 router.delete('/:articleId/:commentId', verify, article_controller.comment_delete );
 
+/* Get most commented articles */
+router.get('/', article_controller.commented_read_get);
+
 export default router;

@@ -327,6 +327,42 @@ const comment_delete = function(req, res, next) {
   });
 }
 
+const commented_read_get = function(req, res) {
+  Article.find({}, 'title content comments')
+    .populate('comments')
+    .exec(function(err, theseArticles) {
+      if (err) { return next(err) }
+      let countList = []
+
+      for (let prop in theseArticles) {
+        if (theseArticles[prop].comments.length !== 0) {
+          countList.push(theseArticles[prop])   
+        }
+      };
+
+      function compare(a, b) {
+        if (a.comments.length < b.comments.length) {
+          return +1
+        }
+        if (a.comments.length > b.comments.length) {
+          return -1
+        }
+        return 0
+      }
+
+      let sortedCount = countList.sort((a,b) => b.comments.length - a.comments.length); 
+
+      let mostCommented = []
+
+      for (let i = 0; i < 5; i++) {
+        mostCommented.push(sortedCount[i])
+      }
+
+      res.json({ commentedArticles: mostCommented })
+
+    });
+}
+
 export default {
   article_read_get, 
   article_create_post, 
@@ -335,5 +371,6 @@ export default {
   comment_read_post,  
   comment_create_post,
   comment_update_put, 
-  comment_delete
+  comment_delete,
+  commented_read_get
 }
