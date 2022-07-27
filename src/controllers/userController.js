@@ -182,18 +182,13 @@ const user_update_put = [
 const user_delete = function(req, res, next) {
   const token = req.header('login-token');
   const parsedToken = parseJwt(token)
-  if (parsedToken._id === req.body.userId) {
-    User.findByIdAndDelete(req.body.userId, function(err, thisUser) {
-      if (err) { return next(err) }
-      res.json({
-        message: `user deleted ${thisUser.profileName}`
-      });
-    });
-  } else {
+
+  User.findByIdAndDelete(parsedToken._id, function(err, thisUser) {
+    if (err) { return next(err) }
     res.json({
-      message: `authentication error`
+      message: `user deleted`
     });
-  }
+  });
 }
 
 const comment_read_get = function(req, res) {

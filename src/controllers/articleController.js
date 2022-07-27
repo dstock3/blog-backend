@@ -363,7 +363,6 @@ const commented_read_get = function(req, res) {
     };
 
     let sortedCount = userList.sort((a,b) => b.article.comments.length - a.article.comments.length); 
-    console.log(sortedCount)
 
     let mostCommented = []
     
@@ -371,9 +370,7 @@ const commented_read_get = function(req, res) {
       mostCommented.push(sortedCount[i])
     }
 
-    console.log(mostCommented)
     res.json({ mostCommented })
-        
   });
 }
 
