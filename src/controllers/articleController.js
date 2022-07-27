@@ -328,39 +328,53 @@ const comment_delete = function(req, res, next) {
 }
 
 const commented_read_get = function(req, res) {
-  Article.find({}, 'title content comments')
-    .populate('comments')
-    .exec(function(err, theseArticles) {
-      if (err) { return next(err) }
-      let countList = []
+  async.parallel({
+    articles: function(cb) {
+      Article.find({}, 'title content comments')
+      .populate('comments')
+      .exec(cb)
+    },
+    users: function(cb) {
+      User.find({}, 'profileName articles')
+      .populate('profileName')
+      .populate('articles')
+      .exec(cb)
+    }
+  }, function(err, results) {
+    if (err) { return next(err) }
+    let countList = []
+    let theseArticles = results.articles
+    for (let prop in theseArticles) {
+      if (theseArticles[prop].comments.length !== 0) {
+        countList.push(theseArticles[prop])   
+      }
+    };
 
-      for (let prop in theseArticles) {
-        if (theseArticles[prop].comments.length !== 0) {
-          countList.push(theseArticles[prop])   
-        }
+    let userList = []
+
+    for (let prop in results.users) {
+      for (let i = 0; i < countList.length; i++) {
+        for (let y = 0; y < results.users[prop].articles.length; y++) {
+          if (results.users[prop].articles[y]._id.toString() === countList[i]._id.toString()) {
+            userList.push({"user": results.users[prop].profileName, "article": countList[i]})
+          };
+        };
       };
+    };
 
-      function compare(a, b) {
-        if (a.comments.length < b.comments.length) {
-          return +1
-        }
-        if (a.comments.length > b.comments.length) {
-          return -1
-        }
-        return 0
-      }
+    let sortedCount = userList.sort((a,b) => b.article.comments.length - a.article.comments.length); 
+    console.log(sortedCount)
 
-      let sortedCount = countList.sort((a,b) => b.comments.length - a.comments.length); 
+    let mostCommented = []
+    
+    for (let i = 0; i < 5; i++) {
+      mostCommented.push(sortedCount[i])
+    }
 
-      let mostCommented = []
-
-      for (let i = 0; i < 5; i++) {
-        mostCommented.push(sortedCount[i])
-      }
-
-      res.json({ commentedArticles: mostCommented })
-
-    });
+    console.log(mostCommented)
+    res.json({ mostCommented })
+        
+  });
 }
 
 export default {
