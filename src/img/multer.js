@@ -1,8 +1,9 @@
+import util from 'util'
 import multer from 'multer'
 
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        callback(null, '.public/images')
+        callback(null, __basedir + '/public/images')
     },
 
     filename: (req, file, callback) => {
@@ -13,6 +14,8 @@ const storage = multer.diskStorage({
 const upload = multer({
     storage: storage
 })
+
+const uploadMiddleware = util.promisify(upload)
 
 const validateImage = file => {
     const filetypes = ['jpg', 'png', 'webp', 'jpeg']
@@ -32,4 +35,4 @@ const validateImage = file => {
     return imgMessages
 }
 
-export { upload, validateImage }
+export { upload, validateImage, uploadMiddleware }
