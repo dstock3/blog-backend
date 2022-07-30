@@ -4,7 +4,7 @@ import async from 'async';
 import { body, validationResult } from "express-validator";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { uploadMiddleware, validateImage } from '../img/multer.js'
+import { validateImage } from '../img/multer.js'
 import { parseJwt } from '../auth/parseToken.js'
 
 const index = async function(req, res, next) {
@@ -85,6 +85,7 @@ const user_create_post = [
 
   async (req, res, next) => {
     const errors = validationResult(req)
+    console.log(req.file)
 
     let imgMessages
     let imgFilename
