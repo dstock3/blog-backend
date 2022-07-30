@@ -3,7 +3,7 @@ import Article from '../models/articles.js';
 import Comment from '../models/comments.js';
 import async from 'async';
 import { body, validationResult } from "express-validator";
-import { validateImage } from '../img/multer.js'
+import { uploadMiddleware, validateImage } from '../img/multer.js'
 import { parseJwt } from '../auth/parseToken.js'
 import comments from '../models/comments.js';
 

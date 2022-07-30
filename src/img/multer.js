@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage: storage
-})
+}).single("file");
 
 const uploadMiddleware = util.promisify(upload)
 
@@ -35,4 +35,4 @@ const validateImage = file => {
     return imgMessages
 }
 
-export { upload, validateImage, uploadMiddleware }
+export { uploadMiddleware, validateImage }

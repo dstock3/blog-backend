@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Router } from 'express';
 import user_controller from '../controllers/userController.js'
 import { verify } from '../auth/verify.js'
-import { upload } from '../img/multer.js'
+import { uploadMiddleware } from '../img/multer.js'
 
 const router = Router();
 
@@ -21,10 +21,10 @@ router.post('/logout', user_controller.logout_post)
 router.get('/:username/', user_controller.user_read_get);
 
 /* Create user profile */
-router.post('/register', upload.single('image'), user_controller.user_create_post);
+router.post('/register', uploadMiddleware, user_controller.user_create_post);
 
 /* Update user profile */
-router.put('/:username/update', [verify, upload.single('image')], user_controller.user_update_put);
+router.put('/:username/update', [verify, uploadMiddleware], user_controller.user_update_put);
 
 /* Delete user profile */
 router.delete('/:username/delete', verify, user_controller.user_delete);
