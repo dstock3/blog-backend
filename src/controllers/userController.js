@@ -85,7 +85,7 @@ const user_create_post = [
     }),
   async (req, res, next) => {
     try {
-      await uploadFile(req, res);
+      await uploadMiddleware(req, res);
     } catch(err) {
       res.status(500).send({
         message: `Could not upload the file: ${req.file.originalname}. ${err}`,

@@ -35,4 +35,4 @@ const validateImage = file => {
     return imgMessages
 }
 
-export { uploadMiddleware, validateImage }
+export { uploadMiddleware, validateImage  }
