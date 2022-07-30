@@ -6,6 +6,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { validateImage } from '../img/multer.js'
 import { parseJwt } from '../auth/parseToken.js'
+import { uploadMiddleware } from '../img/multer.js'
 
 const index = async function(req, res, next) {
   try {
@@ -82,6 +83,16 @@ const user_create_post = [
         }
         return true;
     }),
+  async (req, res, next) => {
+    try {
+      await uploadFile(req, res);
+    } catch(err) {
+      res.status(500).send({
+        message: `Could not upload the file: ${req.file.originalname}. ${err}`,
+      });
+    }
+    next()
+  },
 
   async (req, res, next) => {
     const errors = validationResult(req)
