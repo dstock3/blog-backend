@@ -84,13 +84,6 @@ const user_create_post = [
     }),
 
   async (req, res, next) => {
-    try {
-      await uploadMiddleware(req, res);
-      next()
-    } catch(err) {
-      return next(err)
-
-    }
     const errors = validationResult(req)
 
     let imgMessages
