@@ -7,12 +7,31 @@ import { uploadMiddleware, validateImage } from '../img/multer.js'
 import { parseJwt } from '../auth/parseToken.js'
 import comments from '../models/comments.js';
 
-const article_read_get = function(req, res) {
+const article_read_get = async function(req, res) {
   Article.findById(req.params.articleId, 'title img imgDesc date content comments')
     .populate('comments')
     .exec(function(err, thisArticle) {
-      if (err) { return next(err) }
-      res.json({ article: thisArticle })
+      let articleId = thisArticle._id.toString()
+
+      User.find({}, 'profileName admin profileDesc profilePic themePref layoutPref blogTitle articles')
+        .populate('articles')
+        .exec(function(err, users) {
+        let author
+          if (users) {
+            for (let prop in users) {
+              let user = users[prop]
+              for (let i = 0; i < user.articles.length; i++) {
+                let article = user.articles[i]
+    
+                if (article._id.toString() === articleId) {
+                  author = user
+                };
+              };
+            };
+          };
+        if (err) { return next(err) }
+        res.json({ article: thisArticle, author: author })
+      })
     })
 }
 
