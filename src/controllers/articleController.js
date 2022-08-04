@@ -16,7 +16,8 @@ const article_read_get = async function(req, res) {
       User.find({}, 'profileName admin profileDesc profilePic themePref layoutPref blogTitle articles')
         .populate('articles')
         .exec(function(err, users) {
-        let author
+          let author
+          
           if (users) {
             for (let prop in users) {
               let user = users[prop]
@@ -29,8 +30,19 @@ const article_read_get = async function(req, res) {
               };
             };
           };
+          
+          let comments
+
+          for (let i = 0; i < author.articles.length; i++) {
+            let id = author.articles[i]._id.toString()
+            if (id === thisArticle._id.toString()) {
+              comments = author.articles[i].comments
+              console.log(author.articles[i].comments[0].content)
+            };
+          };
+
         if (err) { return next(err) }
-        res.json({ article: thisArticle, author: author })
+        res.json({ article: thisArticle, author: author, comments: comments })
       })
     })
 }
@@ -243,10 +255,10 @@ const comment_create_post = [
             thisArticle.comments.push(comment)
             thisArticle.save(err => {
               if (err) { return next(err) }
-              res.json({ message: 'comment posted' })
+              res.json({ message: 'comment posted', comments: thisArticle.comments })
             });
         });
-      })
+      });
     } catch(err) {
       return next(err) 
     }
