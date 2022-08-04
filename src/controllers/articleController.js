@@ -31,18 +31,8 @@ const article_read_get = async function(req, res) {
             };
           };
           
-          let comments
-
-          for (let i = 0; i < author.articles.length; i++) {
-            let id = author.articles[i]._id.toString()
-            if (id === thisArticle._id.toString()) {
-              comments = author.articles[i].comments
-              console.log(author.articles[i].comments[0].content)
-            };
-          };
-
         if (err) { return next(err) }
-        res.json({ article: thisArticle, author: author, comments: comments })
+        res.json({ article: thisArticle, author: author })
       })
     })
 }
@@ -255,6 +245,7 @@ const comment_create_post = [
             thisArticle.comments.push(comment)
             thisArticle.save(err => {
               if (err) { return next(err) }
+
               res.json({ message: 'comment posted', comments: thisArticle.comments })
             });
         });
