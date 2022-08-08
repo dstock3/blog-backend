@@ -38,7 +38,7 @@ const login_post = async function (req, res) {
   const isValidPassword = await bcrypt.compare(req.body.password, user.password);
   if (!isValidPassword) return res.status(401).send({ message: "Your login credentials are incorrect." });
 
-  const webToken = jwt.sign({ _id: user.id}, process.env.secretkey, { expiresIn: '30m'} );
+  const webToken = jwt.sign({ _id: user.id}, process.env.secretkey, { expiresIn: '60m'} );
   res.header('login-token', webToken).send(webToken)
 };
 
@@ -207,7 +207,6 @@ const comment_read_get = function(req, res) {
 export default { 
   index, 
   login_post, 
-  logout_post, 
   user_read_get, 
   user_create_post, 
   user_update_put, 
