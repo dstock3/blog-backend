@@ -59,9 +59,9 @@ const article_create_post = [
     if (!errors.isEmpty()) {
       return res.json({ errors: errors.errors })
     }
-
-    const articleTitle = Buffer.from(req.body.title, "utf-8").toString();
-    const articleContent = Buffer.from(req.body.content, "utf-8").toString();
+    
+    const articleTitle = decodeURIComponent(escape(req.body.title));
+    const articleContent = decodeURIComponent(escape(req.body.content));
     try {
       if (req.body.img) {
         const article = new Article({
