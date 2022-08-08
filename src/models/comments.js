@@ -6,7 +6,8 @@ const CommentSchema = new Schema({
     profileName: {type: String, required: true},
     userId: {type: Schema.Types.ObjectId, ref: 'User', required: true},
     content: {type: String, required: true},
-    date: {type: String}
+    date: {type: String},
+    isEdited: {type: Boolean}
 });
 
 //Export model

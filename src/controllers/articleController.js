@@ -248,7 +248,8 @@ const comment_create_post = [
         profileName: req.body.profileName,
         userId: parsedToken._id,
         content: req.body.content,
-        date: timestamp
+        date: timestamp,
+        isEdited: false
       });
 
       comment.save(err => {
@@ -288,7 +289,8 @@ const comment_update_put = [
       profileName: req.body.profileName,
       userId: parsedToken._id,
       content: req.body.content,
-      date: timestamp
+      date: timestamp,
+      isEdited: req.body.isEdited
     }
 
     Comment.findByIdAndUpdate(req.params.commentId, newComment, function(err, thisComment) {
