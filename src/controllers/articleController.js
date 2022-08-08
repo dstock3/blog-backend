@@ -6,6 +6,7 @@ import { body, validationResult } from "express-validator";
 import { uploadMiddleware, validateImage } from '../img/multer.js'
 import { parseJwt } from '../auth/parseToken.js'
 import comments from '../models/comments.js';
+import { format } from 'date-fns'
 
 const article_read_get = async function(req, res) {
   Article.findById(req.params.articleId, 'title img imgDesc date content comments')
@@ -54,7 +55,9 @@ const article_create_post = [
   (req, res, next) => {
     const token = req.header('login-token');
     const parsedToken = parseJwt(token);
-    const errors = validationResult(req)
+    const errors = validationResult(req);
+    
+    const timestamp = format(new Date(), "EEEE, MMMM do, yyyy");
     
     if (!errors.isEmpty()) {
       return res.json({ errors: errors.errors })
@@ -67,7 +70,7 @@ const article_create_post = [
           img: req.body.img,
           imgDesc: req.body.imgDesc,
           content: req.body.content,
-          date: Date.now()
+          date: timestamp
         });
 
         article.save(err => {
@@ -90,7 +93,7 @@ const article_create_post = [
         const article = new Article({
           title: req.body.title,
           content: req.body.content,
-          date: Date.now()
+          date: timestamp
         });
 
         article.save(err => {
@@ -138,6 +141,8 @@ const article_update_put = [
     let imgMessages = false
     if (req.file) { imgMessages = validateImage(req.file) }
     const errors = validationResult(req)
+
+    const timestamp = format(new Date(), "EEEE, MMMM do, yyyy");
   
     if (!errors.isEmpty()) {
       return res.json({ errors: errors.errors })
@@ -150,13 +155,13 @@ const article_update_put = [
           img: req.file.originalname,
           imgDesc: req.body.imgDesc,
           content: req.body.content,
-          date: Date.now()
+          date: timestamp
         };
       } else {
         updatedArticle = {
           title: req.body.title,
           content: req.body.content,
-          date: Date.now()
+          date: timestamp
         };
       }
       
@@ -235,13 +240,15 @@ const comment_create_post = [
     if (!errors.isEmpty()) {
       return res.json({ errors: errors.errors })
     }
+    
+    const timestamp = format(new Date(), "EEEE, MMMM do, yyyy");
 
     try {
       const comment = new Comment({
         profileName: req.body.profileName,
         userId: parsedToken._id,
         content: req.body.content,
-        date: Date.now()
+        date: timestamp
       });
 
       comment.save(err => {
@@ -274,12 +281,14 @@ const comment_update_put = [
 
     const token = req.header('login-token');
     const parsedToken = parseJwt(token);
+
+    const timestamp = format(new Date(), "EEEE, MMMM do, yyyy");
   
     let newComment = {
       profileName: req.body.profileName,
       userId: parsedToken._id,
       content: req.body.content,
-      date: Date.now()
+      date: timestamp
     }
 
     Comment.findByIdAndUpdate(req.params.commentId, newComment, function(err, thisComment) {

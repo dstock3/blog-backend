@@ -111,6 +111,8 @@ const user_create_post = [
       if (userExists !== null) {
          return res.json({ userExists: true })
       }
+
+      const timestamp = format(new Date(), "EEEE, MMMM do, yyyy");
         
       bcrypt.hash(req.body.password, 12, (err, hashedPassword) => {
         const user = new User({
@@ -122,7 +124,7 @@ const user_create_post = [
           layoutPref: req.body.layoutPref,
           blogTitle: req.body.blogTitle,
           profilePic: imgFilename,
-          dateJoined: Date.now()
+          dateJoined: timestamp
         })
 
         user.save(err => {
