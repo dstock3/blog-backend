@@ -101,6 +101,7 @@ const user_create_post = [
     }
 
     if (!errors.isEmpty() || (imgMessages)) {
+      res.set({ 'content-type': 'application/json; charset=utf-8' });
       return res.json({ errors: errors.errors, imgErrors: imgMessages })
     }
     
@@ -125,6 +126,7 @@ const user_create_post = [
 
         user.save(err => {
           if (err) { return next(err) }
+          res.set({ 'content-type': 'application/json; charset=utf-8' });
           res.json({
             message: 'registration successful'
           })
