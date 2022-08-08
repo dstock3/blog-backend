@@ -60,15 +60,13 @@ const article_create_post = [
       return res.json({ errors: errors.errors })
     }
     
-    const articleTitle = decodeURIComponent(escape(req.body.title));
-    const articleContent = decodeURIComponent(escape(req.body.content));
     try {
       if (req.body.img) {
         const article = new Article({
-          title: articleTitle,
+          title: req.body.title,
           img: req.body.img,
           imgDesc: req.body.imgDesc,
-          content: articleContent
+          content: req.body.content
         });
 
         article.save(err => {
@@ -87,11 +85,9 @@ const article_create_post = [
             });
         });
       } else {
-        console.log(articleTitle)
-        console.log(articleContent)
         const article = new Article({
-          title: articleTitle,
-          content: articleContent
+          title: req.body.title,
+          content: req.body.content
         });
 
         article.save(err => {
