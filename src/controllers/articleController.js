@@ -78,6 +78,7 @@ const article_create_post = [
               thisUser.articles.push(article)
               thisUser.save(err => {
                 if (err) { return next(err) }
+                res.set({ 'content-type': 'application/json; charset=utf-8' });
                 res.json({ 
                   message: 'article posted', articleId: article._id
                 });
@@ -99,6 +100,7 @@ const article_create_post = [
               thisUser.articles.push(article)
               thisUser.save(err => {
                 if (err) { return next(err) }
+                res.set({ 'content-type': 'application/json; charset=utf-8' });
                 res.json({ 
                   message: 'article posted', articleId: article._id 
                 });
