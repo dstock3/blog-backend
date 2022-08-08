@@ -66,7 +66,8 @@ const article_create_post = [
           title: req.body.title,
           img: req.body.img,
           imgDesc: req.body.imgDesc,
-          content: req.body.content
+          content: req.body.content,
+          date: Date.now()
         });
 
         article.save(err => {
@@ -78,7 +79,7 @@ const article_create_post = [
               thisUser.articles.push(article)
               thisUser.save(err => {
                 if (err) { return next(err) }
-                res.set({ 'content-type': 'application/json; charset=utf-8' });
+                
                 res.json({ 
                   message: 'article posted', articleId: article._id
                 });
@@ -88,7 +89,8 @@ const article_create_post = [
       } else {
         const article = new Article({
           title: req.body.title,
-          content: req.body.content
+          content: req.body.content,
+          date: Date.now()
         });
 
         article.save(err => {
@@ -100,7 +102,7 @@ const article_create_post = [
               thisUser.articles.push(article)
               thisUser.save(err => {
                 if (err) { return next(err) }
-                res.set({ 'content-type': 'application/json; charset=utf-8' });
+                
                 res.json({ 
                   message: 'article posted', articleId: article._id 
                 });
@@ -148,11 +150,13 @@ const article_update_put = [
           img: req.file.originalname,
           imgDesc: req.body.imgDesc,
           content: req.body.content,
+          date: Date.now()
         };
       } else {
         updatedArticle = {
           title: req.body.title,
           content: req.body.content,
+          date: Date.now()
         };
       }
       
@@ -236,7 +240,8 @@ const comment_create_post = [
       const comment = new Comment({
         profileName: req.body.profileName,
         userId: parsedToken._id,
-        content: req.body.content
+        content: req.body.content,
+        date: Date.now()
       });
 
       comment.save(err => {
@@ -273,7 +278,8 @@ const comment_update_put = [
     let newComment = {
       profileName: req.body.profileName,
       userId: parsedToken._id,
-      content: req.body.content
+      content: req.body.content,
+      date: Date.now()
     }
 
     Comment.findByIdAndUpdate(req.params.commentId, newComment, function(err, thisComment) {

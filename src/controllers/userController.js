@@ -121,7 +121,8 @@ const user_create_post = [
           themePref: req.body.themePref,
           layoutPref: req.body.layoutPref,
           blogTitle: req.body.blogTitle,
-          profilePic: imgFilename
+          profilePic: imgFilename,
+          dateJoined: Date.now()
         })
 
         user.save(err => {
