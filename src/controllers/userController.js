@@ -13,19 +13,19 @@ const index = async function(req, res, next) {
     const results = await User.find({}, 'profileName admin profileDesc profilePic themePref layoutPref blogTitle dateJoined articles')
     .populate('articles');
 
-    const webToken = req.header('login-token');
+    const loginToken = req.header('login-token');
 
-    if (!webToken) {
+    if (!loginToken) {
       res.status(200).json({
         users: results
       });
     } else {
-      const verified = jwt.verify(webToken, process.env.secretkey);
+      const verified = jwt.verify(loginToken, process.env.secretkey);
       res.user = verified;
 
       res.status(200).json({
         users: results,
-        user: req.user
+        user: res.user
       });
     }
   } catch(err) { return next(err) }
