@@ -70,7 +70,8 @@ const article_create_post = [
           img: req.body.img,
           imgDesc: req.body.imgDesc,
           content: req.body.content,
-          date: timestamp
+          date: timestamp,
+          isEdited: false
         });
 
         article.save(err => {
@@ -93,7 +94,8 @@ const article_create_post = [
         const article = new Article({
           title: req.body.title,
           content: req.body.content,
-          date: timestamp
+          date: timestamp,
+          isEdited: false
         });
 
         article.save(err => {
@@ -155,13 +157,15 @@ const article_update_put = [
           img: req.file.originalname,
           imgDesc: req.body.imgDesc,
           content: req.body.content,
-          date: timestamp
+          date: timestamp,
+          isEdited: req.body.isEdited
         };
       } else {
         updatedArticle = {
           title: req.body.title,
           content: req.body.content,
-          date: timestamp
+          date: timestamp,
+          isEdited: req.body.isEdited
         };
       }
       
