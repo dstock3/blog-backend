@@ -42,10 +42,6 @@ const login_post = async function (req, res) {
   res.header('login-token', webToken).send(webToken)
 };
 
-const logout_post = async function (req, res) {
-
-}
-
 const user_read_get = async function(req, res) {
   User.find({ 'profileName': req.params.username }, 'profileName profileDesc profilePic blogTitle dateJoined themePref layoutPref articles')
     .populate('articles')
