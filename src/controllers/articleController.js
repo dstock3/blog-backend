@@ -87,6 +87,8 @@ const article_create_post = [
             });
         });
       } else {
+        console.log(articleTitle)
+        console.log(articleContent)
         const article = new Article({
           title: articleTitle,
           content: articleContent
