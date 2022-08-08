@@ -112,7 +112,7 @@ const user_create_post = [
          return res.json({ userExists: true })
       }
 
-      const timestamp = format(new Date(), "EEEE, MMMM do, yyyy");
+      const timestamp = format(new Date(), "MMMM do, yyyy");
         
       bcrypt.hash(req.body.password, 12, (err, hashedPassword) => {
         const user = new User({

@@ -6,7 +6,7 @@ const ArticleSchema = new Schema({
     title: {type: String, required: true, maxLength: 150},
     img: {type: String},
     imgDesc: {type: String, maxLength: 150},
-    date: {type: Date},
+    date: {type: String},
     content: {type: String, required: true},
     comments: [{type: Schema.Types.ObjectId, ref: 'Comments'}]
 });

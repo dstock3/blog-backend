@@ -57,7 +57,7 @@ const article_create_post = [
     const parsedToken = parseJwt(token);
     const errors = validationResult(req);
     
-    const timestamp = format(new Date(), "EEEE, MMMM do, yyyy");
+    const timestamp = format(new Date(), "MMMM do, yyyy");
     
     if (!errors.isEmpty()) {
       return res.json({ errors: errors.errors })
@@ -142,7 +142,7 @@ const article_update_put = [
     if (req.file) { imgMessages = validateImage(req.file) }
     const errors = validationResult(req)
 
-    const timestamp = format(new Date(), "EEEE, MMMM do, yyyy");
+    const timestamp = format(new Date(), "MMMM do, yyyy");
   
     if (!errors.isEmpty()) {
       return res.json({ errors: errors.errors })
@@ -241,7 +241,7 @@ const comment_create_post = [
       return res.json({ errors: errors.errors })
     }
     
-    const timestamp = format(new Date(), "EEEE, MMMM do, yyyy");
+    const timestamp = format(new Date(), "MMMM do, yyyy");
 
     try {
       const comment = new Comment({
@@ -282,7 +282,7 @@ const comment_update_put = [
     const token = req.header('login-token');
     const parsedToken = parseJwt(token);
 
-    const timestamp = format(new Date(), "EEEE, MMMM do, yyyy");
+    const timestamp = format(new Date(), "MMMM do, yyyy");
   
     let newComment = {
       profileName: req.body.profileName,

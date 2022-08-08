@@ -11,7 +11,7 @@ const UserSchema = new Schema({
     themePref: {type: String, default: "dark"},
     layoutPref: {type: String, default: "basic"},
     blogTitle: {type: String, required: true, maxLength: 100},
-    dateJoined: {type: Date},
+    dateJoined: {type: String},
     articles: [{type: Schema.Types.ObjectId, ref: 'Articles'}]
 });
 
