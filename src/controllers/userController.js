@@ -15,19 +15,14 @@ const index = async function(req, res, next) {
 
     const loginToken = req.header('login-token');
 
-    if (!loginToken) {
-      res.status(200).json({
-        users: results
-      });
-    } else {
-      const verified = jwt.verify(loginToken, process.env.secretkey);
-      res.user = verified;
+    const verified = jwt.verify(loginToken, process.env.secretkey);
+    res.user = verified;
 
-      res.status(200).json({
-        users: results,
-        user: res.user
-      });
-    }
+    res.status(200).json({
+      users: results,
+      user: res.user
+    });
+    
   } catch(err) { return next(err) }
 };
 
