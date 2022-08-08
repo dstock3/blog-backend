@@ -59,14 +59,16 @@ const article_create_post = [
     if (!errors.isEmpty()) {
       return res.json({ errors: errors.errors })
     }
-    
+
+    const articleTitle = Buffer.from(req.body.title, "utf-8").toString();
+    const articleContent = Buffer.from(req.body.content, "utf-8").toString();
     try {
       if (req.body.img) {
         const article = new Article({
-          title: req.body.title,
+          title: articleTitle,
           img: req.body.img,
           imgDesc: req.body.imgDesc,
-          content: req.body.content
+          content: articleContent
         });
 
         article.save(err => {
@@ -86,8 +88,8 @@ const article_create_post = [
         });
       } else {
         const article = new Article({
-          title: req.body.title,
-          content: req.body.content
+          title: articleTitle,
+          content: articleContent
         });
 
         article.save(err => {

@@ -110,7 +110,9 @@ const user_create_post = [
       if (userExists !== null) {
          return res.json({ userExists: true })
       }
-        
+
+      const blogTitle = Buffer.from(req.body.blogTitle, "utf-8").toString();
+      
       bcrypt.hash(req.body.password, 12, (err, hashedPassword) => {
         const user = new User({
           profileName: req.body.profileName,
@@ -119,7 +121,7 @@ const user_create_post = [
           profileDesc: req.body.profileDesc,
           themePref: req.body.themePref,
           layoutPref: req.body.layoutPref,
-          blogTitle: req.body.blogTitle,
+          blogTitle: blogTitle,
           profilePic: imgFilename
         })
 
