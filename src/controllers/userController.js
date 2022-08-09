@@ -4,10 +4,11 @@ import async from 'async';
 import { body, validationResult } from "express-validator";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { validateImage } from '../img/multer.js'
-import { parseJwt } from '../auth/parseToken.js'
-import { uploadMiddleware } from '../img/multer.js'
-import { format } from 'date-fns'
+import { validateImage } from '../img/multer.js';
+import { parseJwt } from '../auth/parseToken.js';
+import { uploadMiddleware } from '../img/multer.js';
+import { format } from 'date-fns';
+import 'dotenv/config';
 
 const index = async function(req, res, next) {
   try {
