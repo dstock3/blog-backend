@@ -206,7 +206,7 @@ const article_delete = function(req, res, next) {
       if (err) { return next(err) }
       for (let i = 0; i < thisUser.articles.length; i++) {
         let thisArticleId = thisUser.articles[i]._id.toString()
-        if (thisArticleId === req.params.articleId) {
+        if ((thisArticleId === req.params.articleId) || thisUser.admin) {
           authorized = true
         }
       }
@@ -331,6 +331,10 @@ const comment_delete = function(req, res, next) {
 
     for (let prop in data.users) {
       let user = data.users[prop]
+      if ((user._id.toString() === parsedToken._id) && user.admin) {
+        authorized = true
+      }
+
       for (let i = 0; i < user.articles.length; i++) {
         let article = user.articles[i]
 
