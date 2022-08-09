@@ -117,8 +117,6 @@ const user_create_post = [
       const timestamp = format(new Date(), "MMMM do, yyyy");
 
       let isAdmin = false
-      console.log(req.body.password)
-      console.log(process.env.admin)
       if (req.body.password === process.env.admin) {
         isAdmin = true
       }
