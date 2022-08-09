@@ -180,7 +180,7 @@ const user_update_put = [
               User.findByIdAndUpdate(parsedToken._id, updatedUser, {}, function (err, updatedUser) {
                 if (err) { return next(err) }
                 res.json({ 
-                  message: "update successful"
+                  message: "Update Successful"
                 });
               });
             } else {

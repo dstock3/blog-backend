@@ -5,7 +5,6 @@ import async from 'async';
 import { body, validationResult } from "express-validator";
 import { uploadMiddleware, validateImage } from '../img/multer.js'
 import { parseJwt } from '../auth/parseToken.js'
-import comments from '../models/comments.js';
 import { format } from 'date-fns'
 
 const article_read_get = async function(req, res) {
@@ -65,14 +64,14 @@ const article_create_post = [
     
     try {
       if (req.body.img) {
-        const article = new Article({
+        const article = {
           title: req.body.title,
           img: req.body.img,
           imgDesc: req.body.imgDesc,
           content: req.body.content,
           date: timestamp,
           isEdited: false
-        });
+        };
 
         article.save(err => {
           if (err) { return next(err) }
@@ -91,12 +90,12 @@ const article_create_post = [
             });
         });
       } else {
-        const article = new Article({
+        const article = {
           title: req.body.title,
           content: req.body.content,
           date: timestamp,
           isEdited: false
-        });
+        };
 
         article.save(err => {
           if (err) { return next(err) }
@@ -183,9 +182,9 @@ const article_update_put = [
             };
 
             if (authorized) { 
-              res.json({ message: "article updated!", articleId: req.params.articleId });
+              res.json({ message: "Article Updated!", articleId: req.params.articleId });
             } else { 
-              res.json({ message: "unauthorized" }) 
+              res.json({ message: "Unauthorized" }) 
             };
           });
       });
@@ -248,13 +247,13 @@ const comment_create_post = [
     const timestamp = format(new Date(), "MMMM do, yyyy");
 
     try {
-      const comment = new Comment({
+      const comment = {
         profileName: req.body.profileName,
         userId: parsedToken._id,
         content: req.body.content,
         date: timestamp,
         isEdited: false
-      });
+      };
 
       comment.save(err => {
         Article.findByIdAndUpdate(req.params.articleId)
