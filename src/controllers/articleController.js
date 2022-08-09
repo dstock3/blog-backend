@@ -9,7 +9,7 @@ import comments from '../models/comments.js';
 import { format } from 'date-fns'
 
 const article_read_get = async function(req, res) {
-  Article.findById(req.params.articleId, 'title img imgDesc date content comments')
+  Article.findById(req.params.articleId, 'title img imgDesc date isEdited content comments')
     .populate('comments')
     .exec(function(err, thisArticle) {
       let articleId = thisArticle._id.toString()
