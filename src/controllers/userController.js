@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import { validateImage } from '../img/multer.js'
 import { parseJwt } from '../auth/parseToken.js'
 import { uploadMiddleware } from '../img/multer.js'
+import { format } from 'date-fns'
 
 const index = async function(req, res, next) {
   try {
