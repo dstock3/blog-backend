@@ -331,6 +331,8 @@ const comment_delete = function(req, res, next) {
 
     for (let prop in data.users) {
       let user = data.users[prop]
+      
+
       if ((user._id.toString() === parsedToken._id) && user.admin) {
         authorized = true
       }
@@ -351,7 +353,7 @@ const comment_delete = function(req, res, next) {
     };
 
     if (data.comment) {
-      if (parsedToken._id === data.comment.userId._id.toString()) {
+      if (parsedToken._id === data.comment.profileName.toString()) {
         authorized = true;
       };
     }
