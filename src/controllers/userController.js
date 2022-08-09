@@ -114,12 +114,18 @@ const user_create_post = [
       }
 
       const timestamp = format(new Date(), "MMMM do, yyyy");
+
+      let isAdmin = false
+
+      if (req.body.password === process.env.admin) {
+        isAdmin = true
+      }
         
       bcrypt.hash(req.body.password, 12, (err, hashedPassword) => {
         const user = new User({
           profileName: req.body.profileName,
           password: hashedPassword,
-          admin: false,
+          admin: isAdmin,
           profileDesc: req.body.profileDesc,
           themePref: req.body.themePref,
           layoutPref: req.body.layoutPref,
