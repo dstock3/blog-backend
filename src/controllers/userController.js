@@ -248,6 +248,8 @@ const user_admin_delete = function(req, res, next) {
           message: `User Deleted`
         });
       });
+    } else {
+      res.status(400).send("Authentication Error")
     };
   });
 }
