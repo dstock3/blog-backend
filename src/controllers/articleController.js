@@ -361,10 +361,10 @@ const comment_delete = function(req, res, next) {
     };
 
     if (data.comment) {
-      if (parsedToken._id === data.comment.userId.toString()) {
+      if (parsedToken._id === data.comment.userId._id.toString()) {
         authorized = true;
       };
-    }
+    };
 
     if (authorized) {
       Article.findOneAndUpdate(
