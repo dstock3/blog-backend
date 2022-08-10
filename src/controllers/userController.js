@@ -26,11 +26,13 @@ const index = async function(req, res, next) {
 
     if (verified) {
       res.user = verified;
+      res.set({ 'content-type': 'application/json; charset=utf-8' });
       res.status(200).json({
         users: results,
         user: res.user
       });
     } else {
+      res.set({ 'content-type': 'application/json; charset=utf-8' });
       res.status(200).json({
         users: results
       });
@@ -54,6 +56,7 @@ const user_read_get = async function(req, res) {
     .populate('articles')
     .exec(function(err, thisUser) {
       if (err) { return next(err) }
+      res.set({ 'content-type': 'application/json; charset=utf-8' });
       res.json({ user: thisUser })
     });
 }
@@ -261,6 +264,7 @@ const comment_read_get = function(req, res) {
       Comment.find({ 'userId': thisUser[0]._id.toString() })
         .exec(function(err, theseComments) {
           if (err) { return next(err) }
+          res.set({ 'content-type': 'application/json; charset=utf-8' });
           res.json({ comments: theseComments })
         });
     });
