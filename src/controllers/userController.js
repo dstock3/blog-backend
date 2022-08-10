@@ -209,6 +209,49 @@ const user_delete = function(req, res, next) {
   });
 }
 
+const user_admin_delete = function(req, res, next) {
+  const token = req.header('login-token');
+  const parsedToken = parseJwt(token);
+
+  async.parallel({
+    user: function(cb) {
+      User.find({ 'profileName': req.params.username }, 'profileName')
+      .populate('profileName')
+      .exec(cb)
+    },
+    users: function(cb) {
+      User.find({}, 'profileName admin')
+      .populate('profileName')
+      .populate('admin')
+      .exec(cb)
+    }
+  }, function(err, results) {
+    let authorized = false
+    let userId
+    for (let prop in results.users) {
+      if (parsedToken._id === results.users[prop]._id.toString()) {
+        console.log(results.users[prop].admin)
+        if (results.users[prop].admin) {
+          authorized = true
+        };
+      };
+      
+      if (req.params.username=== results.users[prop].profileName) {
+        userId = results.users[prop]._id.toString()
+      };
+    };
+
+    if (authorized && userId) {
+      User.findByIdAndDelete(userId, function(err, thisUser) {
+        if (err) { return next(err) }
+        res.json({
+          message: `User Deleted`
+        });
+      });
+    };
+  });
+}
+
 const comment_read_get = function(req, res) {
   User.find({ 'profileName': req.params.username })
     .exec(function(err, thisUser) {
@@ -228,5 +271,6 @@ export default {
   user_create_post, 
   user_update_put, 
   user_delete,
+  user_admin_delete,
   comment_read_get 
 }

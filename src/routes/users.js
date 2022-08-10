@@ -25,6 +25,9 @@ router.put('/:username/update', verify, user_controller.user_update_put);
 /* Delete user profile */
 router.delete('/:username/delete', verify, user_controller.user_delete);
 
+/* Delete user profile from admin account */
+router.delete('/:username', verify, user_controller.user_admin_delete);
+
 /* Get comments for a specific user */
 router.get('/:username/comments', user_controller.comment_read_get);
 
