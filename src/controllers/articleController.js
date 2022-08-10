@@ -57,6 +57,7 @@ const article_create_post = [
     const parsedToken = parseJwt(token);
     const errors = validationResult(req);
     let imgMessages = false
+    console.log(req.file)
     if (req.file) { imgMessages = validateImage(req.file) };
     
     const timestamp = format(new Date(), "MMMM do, yyyy");
