@@ -62,6 +62,8 @@ const article_create_post = [
     if (!errors.isEmpty()) {
       return res.json({ errors: errors.errors })
     }
+
+    console.log(req.file)
     
     try {
       if (req.body.img) {
