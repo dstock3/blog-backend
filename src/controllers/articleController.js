@@ -3,9 +3,9 @@ import Article from '../models/articles.js';
 import Comment from '../models/comments.js';
 import async from 'async';
 import { body, validationResult } from "express-validator";
-import { uploadMiddleware, validateImage } from '../img/multer.js';
 import { parseJwt } from '../auth/parseToken.js';
 import { format } from 'date-fns';
+import { validateImage } from '../img/multer.js';
 
 const article_read_get = async function(req, res) {
   Article.findById(req.params.articleId, 'title img imgDesc date isEdited content comments')
@@ -56,6 +56,8 @@ const article_create_post = [
     const token = req.header('login-token');
     const parsedToken = parseJwt(token);
     const errors = validationResult(req);
+    let imgMessages = false
+    if (req.file) { imgMessages = validateImage(req.file) };
     
     const timestamp = format(new Date(), "MMMM do, yyyy");
     
@@ -66,10 +68,10 @@ const article_create_post = [
     console.log(req.file)
     
     try {
-      if (req.body.img) {
+      if (req.file && !imgMessages) {
         const article = new Article({
           title: req.body.title,
-          img: req.body.img,
+          img: req.file.originalname,
           imgDesc: req.body.imgDesc,
           content: req.body.content,
           date: timestamp,

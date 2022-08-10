@@ -1,30 +1,27 @@
-import util from 'util'
 import multer from 'multer'
 
 const storage = multer.diskStorage({
-    destination: (req, file, callback) => {
-        callback(null, __basedir + '/public/images')
+    destination: (req, file, cb) => {
+        cb(null, './public/images')
     },
 
-    filename: (req, file, callback) => {
-        callback(null, file.originalname)
+    filename: (req, file, cb) => {
+        cb(null,  file.originalname)
     }
 })
-
-const upload = multer({
+  
+const upload = multer({ 
     storage: storage
-}).single("img");
-
-const uploadMiddleware = util.promisify(upload)
+})
 
 const validateImage = file => {
-    const filetypes = ['jpg', 'png', 'webp', 'jpeg']
+    const filetypes = ['jpg', 'png', 'webp', 'jpeg', 'svg']
     const imgMessages = []
 
-    const extension = file.mimetype.split('/').pop();
+    const ext = file.mimetype.split('/').pop();
 
-    if (!filetypes.includes(extension)) {
-        let msg = 'This image file is not valid. The following file types are accepted: jpg, jpeg, png, webp' 
+    if (!filetypes.includes(ext)) {
+        let msg = 'This image file is not valid. The following file types are accepted: jpg, jpeg, png, webp, and svg' 
         imgMessages.push(msg)
     }
 
@@ -35,4 +32,4 @@ const validateImage = file => {
     return imgMessages
 }
 
-export { uploadMiddleware, validateImage  }
+export { upload, validateImage  }

@@ -6,7 +6,6 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { validateImage } from '../img/multer.js';
 import { parseJwt } from '../auth/parseToken.js';
-import { uploadMiddleware } from '../img/multer.js';
 import { format } from 'date-fns';
 import 'dotenv/config';
 
@@ -84,7 +83,7 @@ const user_create_post = [
     }),
   async (req, res, next) => {
     try {
-      await uploadMiddleware(req, res);
+      await upload(req, res);
     } catch(err) {
       res.status(500).send({
         message: `Could not upload the file: ${req.file.originalname}. ${err}`,
