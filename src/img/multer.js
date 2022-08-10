@@ -1,8 +1,9 @@
+import util from 'util'
 import multer from 'multer'
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, '../public/images')
+        cb(null, __basedir + '/public/images')
     },
 
     filename: (req, file, cb) => {
