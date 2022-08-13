@@ -11,7 +11,7 @@ import 'dotenv/config';
 
 const index = async function(req, res, next) {
   try {
-    const results = await User.find({}, 'profileName admin profileDesc profilePic themePref layoutPref blogTitle dateJoined articles')
+    const results = await User.find({}, 'profileName email admin profileDesc profilePic themePref layoutPref blogTitle dateJoined articles')
     .populate('articles');
 
     const loginToken = req.header('login-token');
@@ -51,7 +51,7 @@ const login_post = async function (req, res) {
 };
 
 const user_read_get = async function(req, res) {
-  User.find({ 'profileName': req.params.username }, 'profileName profileDesc profilePic blogTitle dateJoined themePref layoutPref articles')
+  User.find({ 'profileName': req.params.username }, 'profileName email profileDesc profilePic blogTitle dateJoined themePref layoutPref articles')
     .populate('articles')
     .exec(function(err, thisUser) {
       if (err) { return next(err) }
@@ -66,6 +66,9 @@ const user_create_post = [
     .trim()
     .isLength({ min: 4 })
     .escape(),
+  body('email', 'Please enter a valid e-mail address.')
+    .trim()
+    .isEmail(),
   body('password', 'Your password must be at least five characters long.')
     .trim()
     .isLength({ min: 5 })
@@ -81,6 +84,7 @@ const user_create_post = [
         }
         return true;
     }),
+    /*
   async (req, res, next) => {
     try {
       await upload(req, res);
@@ -90,11 +94,11 @@ const user_create_post = [
       });
     }
     next()
-  },
+  },*/
 
   async (req, res, next) => {
     const errors = validationResult(req)
-    console.log(req.file)
+
 
     let imgMessages
     let imgFilename
@@ -105,7 +109,6 @@ const user_create_post = [
     }
 
     if (!errors.isEmpty() || (imgMessages)) {
-      res.set({ 'content-type': 'application/json; charset=utf-8' });
       return res.json({ errors: errors.errors, imgErrors: imgMessages })
     }
     
@@ -126,6 +129,7 @@ const user_create_post = [
       bcrypt.hash(req.body.password, 12, (err, hashedPassword) => {
         const user = new User({
           profileName: req.body.profileName,
+          email: req.body.email,
           password: hashedPassword,
           admin: isAdmin,
           profileDesc: req.body.profileDesc,
@@ -138,7 +142,7 @@ const user_create_post = [
 
         user.save(err => {
           if (err) { return next(err) }
-          res.set({ 'content-type': 'application/json; charset=utf-8' });
+          
           res.json({
             message: 'registration successful'
           })
@@ -156,6 +160,9 @@ const user_update_put = [
     .trim()
     .isLength({ min: 4 })
     .escape(),
+  body('email', 'Please enter a valid e-mail address.')
+    .trim()
+    .isEmail(),
   body('password', 'Your password must be at least five characters long.')
     .trim()
     .isLength({ min: 5 })
@@ -174,6 +181,7 @@ const user_update_put = [
       bcrypt.hash(req.body.password, 12, (err, hashedPassword) => {
         const updatedUser = {
           profileName: req.body.profileName,
+          email: req.body.email,
           password: hashedPassword,
           admin: false,
           profileDesc: req.body.profileDesc,
@@ -263,7 +271,7 @@ const comment_read_get = function(req, res) {
       Comment.find({ 'userId': thisUser[0]._id.toString() })
         .exec(function(err, theseComments) {
           if (err) { return next(err) }
-          res.set({ 'content-type': 'application/json; charset=utf-8' });
+          
           res.json({ comments: theseComments })
         });
     });

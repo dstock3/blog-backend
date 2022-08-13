@@ -113,7 +113,6 @@ const article_create_post = [
               thisUser.save(err => {
                 if (err) { return next(err) }
 
-                res.set({ 'content-type': 'application/json; charset=utf-8' });
                 res.json({ 
                   message: 'article posted', articleId: article._id 
                 });
@@ -189,7 +188,6 @@ const article_update_put = [
             };
 
             if (authorized) {
-              res.set({ 'content-type': 'application/json; charset=utf-8' }); 
               res.json({ message: "Article Updated!", articleId: req.params.articleId });
             } else { 
               res.json({ message: "Unauthorized" }) 
@@ -236,7 +234,6 @@ const comment_read_post = function(req, res) {
     .populate('comments')
     .exec(function(err, thisArticle) {
       if (thisArticle.comments) {
-        res.set({ 'content-type': 'application/json; charset=utf-8' });
         res.json({ comments: thisArticle.comments })
       }
     })
@@ -277,7 +274,6 @@ const comment_create_post = [
             thisArticle.comments.push(comment)
             thisArticle.save(err => {
               if (err) { return next(err) }
-              res.set({ 'content-type': 'application/json; charset=utf-8' });
               res.json({ message: 'comment posted', comments: thisArticle.comments })
             });
         });
@@ -314,7 +310,6 @@ const comment_update_put = [
       if (thisComment.userId.toString() === parsedToken._id) {
         thisComment.save(err => {
           if (err) { return next(err) }
-          res.set({ 'content-type': 'application/json; charset=utf-8' });
           res.json({ message: 'comment updated' })
         });
       } else { res.json({ message: 'unauthorized' }) }
@@ -433,7 +428,7 @@ const commented_read_get = function(req, res) {
     for (let i = 0; i < 5; i++) {
       mostCommented.push(sortedCount[i])
     }
-    res.set({ 'content-type': 'application/json; charset=utf-8' });
+
     res.json({ mostCommented })
   });
 }
