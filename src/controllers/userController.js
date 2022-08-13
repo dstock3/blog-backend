@@ -40,8 +40,8 @@ const index = async function(req, res, next) {
 };
 
 const login_post = async function (req, res) {
-  const user = await User.findOne({ profileName: req.body.username })
-  if(!user) return res.status(400).json({ message: "This username does not exist." });
+  const user = await User.findOne({ 'email': req.body.email })
+  if(!user) return res.status(400).json({ message: "This email does not exist." });
 
   const isValidPassword = await bcrypt.compare(req.body.password, user.password);
   if (!isValidPassword) return res.status(401).send({ message: "Your login credentials are incorrect." });
@@ -85,15 +85,15 @@ const user_create_post = [
         return true;
     }),
     /*
-  async (req, res, next) => {
-    try {
-      await upload(req, res);
-    } catch(err) {
-      res.status(500).send({
-        message: `Could not upload the file: ${req.file.originalname}. ${err}`,
-      });
-    }
-    next()
+    async (req, res, next) => {
+      try {
+        await upload(req, res);
+      } catch(err) {
+        res.status(500).send({
+          message: `Could not upload the file: ${req.file.originalname}. ${err}`,
+        });
+      }
+      next()
   },*/
 
   async (req, res, next) => {
