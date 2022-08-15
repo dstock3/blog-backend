@@ -15,6 +15,7 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(cors());
+app.use('/images', express.static('./images'));
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('dev'));
