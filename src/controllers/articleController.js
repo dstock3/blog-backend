@@ -76,8 +76,6 @@ const article_create_post = [
           isEdited: false
         });
 
-        console.log(article)
-
         article.save(err => {
           if (err) { return next(err) }
 
