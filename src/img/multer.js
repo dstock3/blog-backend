@@ -1,19 +1,23 @@
-import util from 'util'
 import multer from 'multer'
+import path from 'path'
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, __basedir + '/images')
+        cb(null, path.join(__dirname, '../../images/'))
     },
 
     filename: (req, file, cb) => {
-        cb(null,  file.originalname)
+        console.log(file)
+        cb(null, Date.now() + path.extname(file.originalname))
     }
 })
-  
-const upload = multer({ 
-    storage: storage
-})
+
+const upload = multer({ storage: storage });
 
 const validateImage = file => {
     const filetypes = ['jpg', 'png', 'webp', 'jpeg', 'svg']

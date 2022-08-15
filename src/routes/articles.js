@@ -15,7 +15,7 @@ router.get('/:articleId', article_controller.article_read_get);
 router.post('/compose', [verify, upload.single('img')], article_controller.article_create_post);
 
 /* Update specific article */
-router.put('/:articleId', [verify, upload.single('image')], article_controller.article_update_put);
+router.put('/:articleId', [verify, upload.single('img')], article_controller.article_update_put);
 
 /* Delete specific article */
 router.delete('/:articleId/', verify, article_controller.article_delete);

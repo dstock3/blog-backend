@@ -57,7 +57,6 @@ const article_create_post = [
     const parsedToken = parseJwt(token);
     const errors = validationResult(req);
     let imgMessages = false
-    console.log(req.file)
     if (req.file) { imgMessages = validateImage(req.file) };
     
     const timestamp = format(new Date(), "MMMM do, yyyy");
@@ -66,18 +65,18 @@ const article_create_post = [
       return res.json({ errors: errors.errors })
     }
 
-    console.log(req.file)
-    
     try {
-      if (req.file && !imgMessages) {
+      if (req.file) {
         const article = new Article({
           title: req.body.title,
-          img: req.file.originalname,
+          img: req.file.filename,
           imgDesc: req.body.imgDesc,
           content: req.body.content,
           date: timestamp,
           isEdited: false
         });
+
+        console.log(article)
 
         article.save(err => {
           if (err) { return next(err) }

@@ -180,8 +180,8 @@ const user_update_put = [
 
       bcrypt.hash(req.body.password, 12, (err, hashedPassword) => {
         const updatedUser = {
-          profileName: req.body.profileName,
           email: req.body.email,
+          profileName: req.body.profileName,
           password: hashedPassword,
           admin: false,
           profileDesc: req.body.profileDesc,
