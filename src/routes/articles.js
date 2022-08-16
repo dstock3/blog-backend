@@ -35,4 +35,7 @@ router.delete('/:articleId/:commentId', verify, article_controller.comment_delet
 /* Get most commented articles */
 router.get('/', article_controller.commented_read_get);
 
+/* Get pic for a specific article */ 
+router.get('/images:key', article_controller.pic_read_get)
+
 export default router;

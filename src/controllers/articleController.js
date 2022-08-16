@@ -6,6 +6,7 @@ import { body, validationResult } from "express-validator";
 import { parseJwt } from '../auth/parseToken.js';
 import { format } from 'date-fns';
 import { validateImage } from '../img/multer.js';
+import { uploadFile, getFileStream } from '../../s3.js'
 
 const article_read_get = async function(req, res) {
   Article.findById(req.params.articleId, 'title img imgDesc date isEdited content comments')
@@ -52,7 +53,7 @@ const article_create_post = [
     .trim()
     .isLength({max: 150})
     .escape(),
-  (req, res, next) => {
+  async (req, res, next) => {
     const token = req.header('login-token');
     const parsedToken = parseJwt(token);
     const errors = validationResult(req);
@@ -75,6 +76,9 @@ const article_create_post = [
           date: timestamp,
           isEdited: false
         });
+
+        const imageUpload = await uploadFile(req.file)
+        console.log(imageUpload)
 
         article.save(err => {
           if (err) { return next(err) }
@@ -162,6 +166,9 @@ const article_update_put = [
           date: timestamp,
           isEdited: req.body.isEdited
         };
+
+        const imageUpload = await uploadFile(req.file)
+        console.log(imageUpload)
       } else {
         updatedArticle = {
           title: req.body.title,
@@ -430,6 +437,13 @@ const commented_read_get = function(req, res) {
   });
 }
 
+const pic_read_get = function(req, res) {
+  const key = req.params.key
+  const readStream = getFileStream(key)
+
+  readStream.pipe(res)
+}
+
 export default {
   article_read_get, 
   article_create_post, 
@@ -439,5 +453,6 @@ export default {
   comment_create_post,
   comment_update_put, 
   comment_delete,
-  commented_read_get
+  commented_read_get,
+  pic_read_get
 }

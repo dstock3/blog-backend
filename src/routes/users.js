@@ -32,4 +32,7 @@ router.delete('/:username', verify, user_controller.user_admin_delete);
 /* Get comments for a specific user */
 router.get('/:username/comments', user_controller.comment_read_get);
 
+/* Get profile pic for a specific user */
+router.get('/images/:key', user_controller.pic_read_get)
+
 export default router;

@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import { validateImage } from '../img/multer.js';
 import { parseJwt } from '../auth/parseToken.js';
 import { format } from 'date-fns';
+import { uploadFile, getFileStream } from '../../s3.js'
 import 'dotenv/config';
 
 const index = async function(req, res, next) {
@@ -101,6 +102,11 @@ const user_create_post = [
     try {
       const userExists = await User.findOne({profileName: req.body.profileName});
 
+      if (req.file) {
+        const imageUpload = await uploadFile(req.file)
+        console.log(imageUpload)
+      }
+
       if (userExists !== null) {
          return res.json({ userExists: true })
       }
@@ -128,7 +134,8 @@ const user_create_post = [
           if (err) { return next(err) }
           
           res.json({
-            message: 'registration successful'
+            message: 'registration successful',
+            profilePic: `images/${imageUpload.Key}`
           })
         })
       })
@@ -162,6 +169,9 @@ const user_update_put = [
 
       if (req.file) { 
         imgMessages = validateImage(req.file)
+
+        const imageUpload = await uploadFile(req.file)
+        console.log(imageUpload)
       }
       
       if (!errors.isEmpty() || (imgMessages.length > 0)) {
@@ -268,6 +278,13 @@ const comment_read_get = function(req, res) {
     });
 }
 
+const pic_read_get = function(req, res) {
+  const key = req.params.key
+  const readStream = getFileStream(key)
+
+  readStream.pipe(res)
+}
+
 export default { 
   index, 
   login_post, 
@@ -276,5 +293,6 @@ export default {
   user_update_put, 
   user_delete,
   user_admin_delete,
-  comment_read_get 
+  comment_read_get,
+  pic_read_get
 }
