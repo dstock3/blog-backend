@@ -102,8 +102,10 @@ const user_create_post = [
     try {
       const userExists = await User.findOne({profileName: req.body.profileName});
 
+      let imageUpload
+
       if (req.file) {
-        const imageUpload = await uploadFile(req.file)
+        imageUpload = await uploadFile(req.file)
         console.log(imageUpload)
       }
 
@@ -166,11 +168,12 @@ const user_update_put = [
       const errors = validationResult(req);
 
       let imgMessages
+      let imageUpload
 
       if (req.file) { 
         imgMessages = validateImage(req.file)
 
-        const imageUpload = await uploadFile(req.file)
+        imageUpload = await uploadFile(req.file)
         console.log(imageUpload)
       }
       
@@ -197,7 +200,8 @@ const user_update_put = [
               User.findByIdAndUpdate(parsedToken._id, updatedUser, {}, function (err, updatedUser) {
                 if (err) { return next(err) }
                 res.json({ 
-                  message: "Update Successful"
+                  message: "Update Successful",
+                  profilePic: `images/${imageUpload.Key}`
                 });
               });
             } else {

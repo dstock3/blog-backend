@@ -91,7 +91,8 @@ const article_create_post = [
                 if (err) { return next(err) }
                 
                 res.json({ 
-                  message: 'article posted', articleId: article._id
+                  message: 'article posted', articleId: article._id,
+                  articlePic: `images/${imageUpload.Key}`
                 });
               });
             });
@@ -115,7 +116,8 @@ const article_create_post = [
                 if (err) { return next(err) }
 
                 res.json({ 
-                  message: 'article posted', articleId: article._id 
+                  message: 'article posted', articleId: article._id,
+
                 });
               })
             });
@@ -192,7 +194,11 @@ const article_update_put = [
             };
 
             if (authorized) {
-              res.json({ message: "Article Updated!", articleId: req.params.articleId });
+              res.json({ 
+                message: "Article Updated!", 
+                articleId: req.params.articleId, 
+                articlePic: `images/${imageUpload.Key}` 
+              });
             } else { 
               res.json({ message: "Unauthorized" }) 
             };
