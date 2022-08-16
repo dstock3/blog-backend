@@ -84,31 +84,17 @@ const user_create_post = [
         }
         return true;
     }),
-    /*
-    async (req, res, next) => {
-      try {
-        await upload(req, res);
-      } catch(err) {
-        res.status(500).send({
-          message: `Could not upload the file: ${req.file.originalname}. ${err}`,
-        });
-      }
-      next()
-  },*/
 
   async (req, res, next) => {
     const errors = validationResult(req)
 
-
     let imgMessages
-    let imgFilename
 
     if (req.file) { 
       imgMessages = validateImage(req.file)
-      imgFilename = req.file.originalname
     }
 
-    if (!errors.isEmpty() || (imgMessages)) {
+    if (!errors.isEmpty() || (imgMessages.length > 0)) {
       return res.json({ errors: errors.errors, imgErrors: imgMessages })
     }
     
@@ -133,10 +119,8 @@ const user_create_post = [
           password: hashedPassword,
           admin: isAdmin,
           profileDesc: req.body.profileDesc,
-          themePref: req.body.themePref,
-          layoutPref: req.body.layoutPref,
           blogTitle: req.body.blogTitle,
-          profilePic: imgFilename,
+          profilePic: req.file.filename,
           dateJoined: timestamp
         })
 
@@ -172,10 +156,16 @@ const user_update_put = [
       const token = req.header('login-token');
       const parsedToken = parseJwt(token);
 
-      const errors = validationResult(req)
+      const errors = validationResult(req);
+
+      let imgMessages
+
+      if (req.file) { 
+        imgMessages = validateImage(req.file)
+      }
       
-      if (!errors.isEmpty()) {
-        return res.json({ errors: errors.errors })
+      if (!errors.isEmpty() || (imgMessages.length > 0)) {
+        return res.json({ errors: errors.errors, imgErrors: imgMessages })
       }
 
       bcrypt.hash(req.body.password, 12, (err, hashedPassword) => {
@@ -187,6 +177,7 @@ const user_update_put = [
           profileDesc: req.body.profileDesc,
           themePref: req.body.themePref,
           layoutPref: req.body.layoutPref,
+          profilePic: req.file.filename,
           blogTitle: req.body.blogTitle,
         }
 

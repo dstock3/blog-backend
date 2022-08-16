@@ -18,10 +18,10 @@ router.post('/login', user_controller.login_post);
 router.get('/:username/', user_controller.user_read_get);
 
 /* Create user profile */
-router.post('/register', upload.single('img'), user_controller.user_create_post);
+router.post('/register', upload.single('profilePic'), user_controller.user_create_post);
 
 /* Update user profile */
-router.put('/:username/update', [verify, upload.single('img')], user_controller.user_update_put);
+router.put('/:username/update', [verify, upload.single('profilePic')], user_controller.user_update_put);
 
 /* Delete user profile */
 router.delete('/:username/delete', verify, user_controller.user_delete);
