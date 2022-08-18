@@ -148,7 +148,7 @@ const article_update_put = [
     const parsedToken = parseJwt(token);
     let authorized = false;
 
-    let imgMessages = false
+    let imgMessages = []
     if (req.file) { imgMessages = validateImage(req.file) }
     const errors = validationResult(req)
 
@@ -162,7 +162,7 @@ const article_update_put = [
       if (req.file && !imgMessages) {
         updatedArticle = {
           title: req.body.title,
-          img: req.file.originalname,
+          img: req.file.filename,
           imgDesc: req.body.imgDesc,
           content: req.body.content,
           date: timestamp,
