@@ -103,10 +103,11 @@ const user_create_post = [
       const userExists = await User.findOne({profileName: req.body.profileName});
 
       let imageUpload
+      let imgFile
 
       if (req.file) {
         imageUpload = await uploadFile(req.file)
-        console.log(imageUpload)
+        imgFile = req.file
       }
 
       if (userExists !== null) {
@@ -128,7 +129,7 @@ const user_create_post = [
           admin: isAdmin,
           profileDesc: req.body.profileDesc,
           blogTitle: req.body.blogTitle,
-          profilePic: req.file.filename,
+          profilePic: imgFile,
           dateJoined: timestamp
         })
 
@@ -172,12 +173,15 @@ const user_update_put = [
 
       let imgMessages = []
       let imageUpload 
+      let imgFile
 
       if (req.file) { 
         imgMessages = validateImage(req.file)
 
+        imgFile = req.file
+
         imageUpload = await uploadFile(req.file)
-        console.log(imageUpload)
+        
       }
       
       if (!errors.isEmpty() || (imgMessages.length > 0)) {
@@ -193,7 +197,7 @@ const user_update_put = [
           profileDesc: req.body.profileDesc,
           themePref: req.body.themePref,
           layoutPref: req.body.layoutPref,
-          profilePic: req.file.filename,
+          profilePic: imgFile,
           blogTitle: req.body.blogTitle,
         }
 
