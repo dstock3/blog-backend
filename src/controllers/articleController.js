@@ -153,8 +153,10 @@ const article_update_put = [
     const errors = validationResult(req)
 
     const timestamp = format(new Date(), "MMMM do, yyyy");
+   
     const imageUpload = await uploadFile(req.file)
     console.log(imageUpload)
+
     if (!errors.isEmpty()) {
       return res.json({ errors: errors.errors })
     } else {

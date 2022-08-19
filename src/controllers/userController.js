@@ -152,14 +152,17 @@ const user_update_put = [
   body('profileName', 'Your username must be at least four characters long.')
     .trim()
     .isLength({ min: 4 })
-    .escape(),
+    .escape()
+    .optional({nullable: true}),
   body('email', 'Please enter a valid e-mail address.')
     .trim()
-    .isEmail(),
+    .isEmail()
+    .optional({nullable: true}),
   body('password', 'Your password must be at least five characters long.')
     .trim()
     .isLength({ min: 5 })
-    .escape(),
+    .escape()
+    .optional({nullable: true}),
 
     async (req, res, next) => {
       const token = req.header('login-token');
