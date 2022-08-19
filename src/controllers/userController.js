@@ -206,10 +206,16 @@ const user_update_put = [
             if (thisUser[0]._id.toString() === parsedToken._id) {
               User.findByIdAndUpdate(parsedToken._id, updatedUser, {}, function (err, updatedUser) {
                 if (err) { return next(err) }
-                res.json({ 
-                  message: "Update Successful",
-                  profilePic: `images/${imageUpload.Key}`
-                });
+                if (imageUpload) {
+                  res.json({ 
+                    message: "Update Successful",
+                    profilePic: `images/${imageUpload.Key}`
+                  });
+                } else {
+                  res.json({ 
+                    message: "Update Successful",
+                  });
+                };
               });
             } else {
               res.json({ message: "authentication error" });
