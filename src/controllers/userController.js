@@ -107,7 +107,7 @@ const user_create_post = [
 
       if (req.file) {
         imageUpload = await uploadFile(req.file)
-        imgFile = req.file
+        imgFile = req.file.filename
       }
 
       if (userExists !== null) {
@@ -178,7 +178,7 @@ const user_update_put = [
       if (req.file) { 
         imgMessages = validateImage(req.file)
 
-        imgFile = req.file
+        imgFile = req.file.filename
 
         imageUpload = await uploadFile(req.file)
         

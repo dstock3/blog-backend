@@ -8,7 +8,7 @@ const UserSchema = new Schema({
     password: {type: String, required: true, minLength: 5 },
     admin: {type: Boolean, default: false},
     profileDesc: {type: String, required: true, maxLength: 350},
-    profilePic: {type: String, typeKey: '$type' },
+    profilePic: {type: String },
     themePref: {type: String, default: "dark"},
     layoutPref: {type: String, default: "basic"},
     blogTitle: {type: String, required: true, maxLength: 100},
