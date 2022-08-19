@@ -89,7 +89,7 @@ const user_create_post = [
   async (req, res, next) => {
     const errors = validationResult(req)
 
-    let imgMessages
+    let imgMessages = []
 
     if (req.file) { 
       imgMessages = validateImage(req.file)
@@ -170,8 +170,8 @@ const user_update_put = [
 
       const errors = validationResult(req);
 
-      let imgMessages
-      let imageUpload
+      let imgMessages = []
+      let imageUpload 
 
       if (req.file) { 
         imgMessages = validateImage(req.file)
