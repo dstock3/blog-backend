@@ -9,6 +9,9 @@ const router = Router();
 /* Get home page */
 router.get('/', user_controller.index);
 
+/* Wildcard route */
+router.get("*", user_controller.index);
+
 /* Post for Login page */
 router.post('/login', user_controller.login_post);
 
