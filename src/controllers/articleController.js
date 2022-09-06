@@ -78,8 +78,7 @@ const article_create_post = [
         });
 
         const imageUpload = await uploadFile(req.file)
-        console.log(imageUpload)
-
+        
         article.save(err => {
           if (err) { return next(err) }
 
@@ -146,17 +145,15 @@ const article_update_put = [
   async (req, res, next) => {
     const token = req.header('login-token');
     const parsedToken = parseJwt(token);
+    const errors = validationResult(req);
+    let imgMessages = false
     let authorized = false;
 
-    let imgMessages = []
     if (req.file) { imgMessages = validateImage(req.file) }
-    const errors = validationResult(req)
-
+    
     const timestamp = format(new Date(), "MMMM do, yyyy");
    
-    const imageUpload = await uploadFile(req.file)
-    console.log(imageUpload)
-
+    let imageUpload
     if (!errors.isEmpty()) {
       return res.json({ errors: errors.errors })
     } else {
@@ -172,7 +169,7 @@ const article_update_put = [
           isEdited: req.body.isEdited
         };
 
-
+        imageUpload = await uploadFile(req.file)
       } else {
         updatedArticle = {
           title: req.body.title,
@@ -220,7 +217,6 @@ const article_delete = function(req, res, next) {
     {$pull: { articles: req.params.articleId }}, 
     
     function(err, thisUser) {
-      
       if (err) { return next(err) }
       if (thisUser.admin) {
         authorized = true
