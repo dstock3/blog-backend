@@ -153,7 +153,7 @@ const article_update_put = [
     
     const timestamp = format(new Date(), "MMMM do, yyyy");
    
-    let imageUpload
+    let imageUpload = false
     if (!errors.isEmpty()) {
       return res.json({ errors: errors.errors })
     } else {
@@ -193,10 +193,14 @@ const article_update_put = [
             };
 
             if (authorized) {
+              let picPath
+              if (imageUpload) {
+                picPath = `images/${imageUpload.Key}`
+              }
               res.json({ 
                 message: "Article Updated!", 
                 articleId: req.params.articleId, 
-                articlePic: `images/${imageUpload.Key}` 
+                articlePic: picPath
               });
             } else { 
               res.json({ message: "Unauthorized" }) 
